@@ -4,6 +4,7 @@ environments {
             host = "localhost"
             port = 27017
             databaseName = "test"
+            connectionString = "mongodb://localhost/test"
         }
     }
     test {
@@ -11,6 +12,7 @@ environments {
             host = "localhost"
             port = 27017
             databaseName = "test"
+            connectionString = "mongodb://localhost/test"
         }
     }
     production {
@@ -18,6 +20,7 @@ environments {
             host = "localhost"
             port = 27017
             databaseName = "test"
+            connectionString = "mongodb://localhost/test"
         }
     }
 }

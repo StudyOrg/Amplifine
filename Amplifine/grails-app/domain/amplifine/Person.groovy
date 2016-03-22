@@ -1,14 +1,19 @@
 package amplifine
 
+import org.bson.types.ObjectId
+
 class Person {
+    ObjectId id
 
-    String _id
-    int balls
+    String name
+    String surname
 
-    static mongoTypeName = 'person'
-    static mongoFields = [
-            'b' : 'balls'
-    ]
+    static mapWith = "mongo"
 
+    static mapping = {
+        version false
+
+        collection "person"
+        database "test"
+    }
 }
-

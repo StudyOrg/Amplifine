@@ -2,17 +2,21 @@ package amplifine
 
 class TestController {
 
-    static mapWith = "mongo"
-
     def index() {
-        def records = Person.findAll()
+        def records = Person.getAll()
 
-        render(view:"initial", model:[records:records])
+        render(view: "initial", model: [records: records[0]])
     }
 
     def make() {
-        new Person(balls: 2).save(flush:true)
+        def record = new Person(name: "KillDom", surname: "SomeOne")
 
-        render(view:"initial")
+        if (record.save(flush: true)) {
+
+            render(view: "initial", model: [records: record])
+        } else {
+            render(view: "initial", model: [records: "failed"])
+        }
+
     }
 }
