@@ -1,0 +1,75 @@
+/*Supplies*/
+[
+	{
+		"_id" : ObjectId("generatedId"),
+		
+		"Supplier" : {
+			"name": "Supplier full name",
+			"region": "Examples: Center, Syberia, North-West, etc."
+		},
+		
+		"Goods": [
+			{
+				"goodId": ObjectId("generatedId"),
+				"amount": Integer,
+				"purchasigPrice": Float /*for one good*/
+			},
+			{
+				"goodId": ObjectId("generatedId"),
+				"amount": Integer,
+				"purchasigPrice": Float, /*for one good*/
+			}
+		],
+		
+		"DateCreateSupply": Date,
+		"Store": ObjectId("generatedId"),
+		"UserCreated": ObjectId("generatedId"),
+	}
+]
+
+/*Goods*/
+[
+	{
+		"_id": ObjectId("generatedId"),
+		"Manufacturer": "Fender, Gibson, Weinbach, Bechstein, etc.", 
+		"Model": "Stratocaster, Les-Paul Special, B-190, S108, etc.",
+		"Color": "Optional field: black, White, Yellow90, etc.",
+		"Material": "Optional field: wood, plastic, Metall, etc.",
+		"Type": "Guitar, Piano, Saxophone, etc.",
+		"RetailPrice": Float,
+	}
+]
+
+/*Stores*/
+[
+	{
+		"_id": ObjectId("generatedId"),
+		"Name": "Full name of store",
+		
+		"Address": {
+			"city": "St.Petersburg",
+			"street": "Leninskii prospect",
+			"houseNumber": "9, 9/2, 9 lit.A, 10-99",
+			"zipCode": 198255
+		}
+	}
+]
+
+/*Users*/
+[
+	{
+		"_id": ObjectId("generatedId"),
+		"Name": "name",
+		"Surname": "surname",
+		
+		"Documents": {
+			"passport": "4012 777888, St.Petersburg",
+			"inn": 51231238,
+			"workingBook": 376289
+		},
+		
+		"BornCity": "Leningrad",
+		"DateBirth": Date,
+		"Fired": Date /*Optional field*/
+	}
+]
