@@ -3,6 +3,8 @@
 # suggested that you use the "grails integrate-with --git" command
 # to generate your .gitignore file.
 
+.gitignore
+
 # web application files
 /web-app/WEB-INF/classes
 
@@ -32,6 +34,17 @@
 # "temporary" build files
 /target
 
-.idea/
-*.iml
-.gitignore
+# User-specific stuff:
+Amplifine/.idea/
+Amplifine/Amplifine.iml
+
+## File-based project format:
+Amplifine/*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+Amplifine/out/
+
+# mpeltonen/sbt-idea plugin
+Amplifine/.idea_modules/
