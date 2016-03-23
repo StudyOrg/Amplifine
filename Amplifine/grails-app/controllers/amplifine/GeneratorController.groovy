@@ -2,6 +2,8 @@ package amplifine
 
 import amplifine.gen.MongoGenerator
 import amplifine.gen.tables.GoodsGenerator
+import amplifine.utils.TypesUtil
+import mongodb.MongoDBUtil
 
 class GeneratorController {
     def index() {
@@ -9,7 +11,7 @@ class GeneratorController {
     }
 
     def goods() {
-        Integer count = params.count ? params.count as Integer : null
+        Integer count = TypesUtil.parseInt(params.count)
         def notify = []
 
         if (count && count > 0) {
@@ -31,6 +33,29 @@ class GeneratorController {
             } else {
                 notify << "При создании товаров возникла ошибка."
             }
+        } else {
+            notify << "Количество товаров не задано, запрос отклонен."
+        }
+
+        render(view: "index", model: [notify: notify])
+    }
+
+    def all() {
+        def notify = []
+
+        def db = MongoDBUtil.getDB()
+
+        String count = params.count
+        Integer goodsCount = TypesUtil.parseInt(count)
+
+        if (goodsCount != null) {
+            String[] collections = ["goods"]
+            MongoGenerator[] generators = [new GoodsGenerator(goodsCount)]
+
+            collections.each {
+                db.getCollection(it).deleteMany([:])
+            }
+            notify << "Коллекции усечены"
         } else {
             notify << "Количество товаров не задано, запрос отклонен."
         }
