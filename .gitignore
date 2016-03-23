@@ -44,6 +44,9 @@ Amplifine/*.iws
 
 ## Plugin-specific files:
 
+# Target
+Amplifine/target/
+
 # IntelliJ
 Amplifine/out/
 

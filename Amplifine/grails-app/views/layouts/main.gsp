@@ -18,13 +18,12 @@
                 <a class="navbar-brand" href="#">Amplifine</a>
             </div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Данные</a></li>
-                <li><a href="#">Генератор</a></li>
+                <li class="active"><a href="/">Данные</a></li>
+                <li><a href="/">Генератор</a></li>
+                <li><a href="https://github.com/StudyOrg/Amplifine">Github</a></li>
             </ul>
         </div>
     </nav>
-
-    <h1>Hello, world!</h1>
     <g:layoutBody/>
 </div>
 
