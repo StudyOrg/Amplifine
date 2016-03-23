@@ -37,6 +37,7 @@
 # User-specific stuff:
 Amplifine/.idea/
 Amplifine/Amplifine.iml
+Amplifine-grailsPlugins.iml
 
 ## File-based project format:
 Amplifine/*.iws

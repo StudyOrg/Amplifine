@@ -14,6 +14,5 @@ class Person {
         version false
 
         collection "person"
-        database "test"
     }
 }
