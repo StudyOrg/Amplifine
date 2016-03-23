@@ -2,6 +2,7 @@ package amplifine
 
 import amplifine.gen.MongoGenerator
 import amplifine.gen.tables.GoodsGenerator
+import amplifine.gen.tables.ShopsGenerator
 import amplifine.utils.TypesUtil
 import mongodb.MongoDBUtil
 
@@ -49,13 +50,18 @@ class GeneratorController {
         Integer goodsCount = TypesUtil.parseInt(count)
 
         if (goodsCount != null) {
-            String[] collections = ["goods"]
-            MongoGenerator[] generators = [new GoodsGenerator(goodsCount)]
+            String[] collections = ["goods", "shops"]
+            MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator()]
 
             collections.each {
                 db.getCollection(it).deleteMany([:])
             }
             notify << "Коллекции усечены"
+
+            generators.each {
+                it.insertAll()
+            }
+            notify << "Значения вставлены"
         } else {
             notify << "Количество товаров не задано, запрос отклонен."
         }
