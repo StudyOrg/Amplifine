@@ -1,11 +1,10 @@
 package amplifine.gen.tables
 
-import amplifine.Goods
+import amplifine.gen.dictionaries.*
+
 import amplifine.gen.MongoGenerator
-import amplifine.gen.dictionaries.GoodsTypesDictionary
-import amplifine.gen.dictionaries.ManufacturerData
-import amplifine.gen.dictionaries.Manufacturers
 import amplifine.gen.utils.Randomifier
+import mongodb.MongoDBUtil
 
 class GoodsGenerator implements MongoGenerator {
     static def data = []
@@ -91,18 +90,20 @@ class GoodsGenerator implements MongoGenerator {
     }
 
     Boolean insertAll() {
-        Goods record
+        def db = MongoDBUtil.getDB()
+
+        def record
 
         Boolean status = true
         for (result in data) {
-            record = new Goods()
+            record = [:]
 
-            record.manufacturer = result.manufacturer
-            record.model = result.model
-            record.type = result.type
-            record.retailPrice = result.retailPrice
+            record << [manufacturer: result.manufacturer]
+            record << [model: result.model]
+            record << [type: result.type]
+            record << [retailPrice: result.retailPrice]
 
-            status = record.insert()
+            status = (db.getCollection("goods") << record)
             if (!status) {
                 break
             }
