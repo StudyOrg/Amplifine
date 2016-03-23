@@ -3,30 +3,30 @@
 	{
 		"_id" : ObjectId("generatedId"),
 
-		"Customer" : {
+		"customer" : {
 			"name": "Customer name",
 			"surname": "Customer surname",
-			"tel": "String, optional",
-			"mail": "String, optional",
-			"gender": "String, male female"
+			"tel": "String, optional"
 		},
 
-		"Goods": [
+		"goods": [
 			{
 				"goodId": ObjectId("generatedId"),
-				"amount": Integer,
+				"description": "Manufacturer + Model",
+				"qty": Integer,
 				"retailPrice": Float /*for one good*/
 			},
 			{
 				"goodId": ObjectId("generatedId"),
-				"amount": Integer,
+                "description": "Manufacturer + Model",
+				"qty": Integer,
 				"retailPrice": Float, /*for one good*/
 			}
 		],
 
-		"DateSale": Date,
-		"Shop": ObjectId("generatedId"),
-		"UserSaled": ObjectId("generatedId"),
+		"date": Date,
+		"shop": ObjectId("generatedId"),
+		"userSaled": ObjectId("generatedId"),
 	}
 ]
 
@@ -43,19 +43,21 @@
 		"Goods": [
 			{
 				"goodId": ObjectId("generatedId"),
-				"amount": Integer,
+                "description": "Manufacturer + Model",
+				"qty": Integer,
 				"purchasigPrice": Float /*for one good*/
 			},
 			{
 				"goodId": ObjectId("generatedId"),
-				"amount": Integer,
+                "description": "Manufacturer + Model",
+				"qty": Integer,
 				"purchasigPrice": Float, /*for one good*/
 			}
 		],
 
-		"DateCreateSupply": Date,
-		"Store": ObjectId("generatedId"),
-		"UserCreated": ObjectId("generatedId"),
+		"date": Date,
+		"shop": ObjectId("generatedId"),
+		"user": ObjectId("generatedId"),
 	}
 ]
 
@@ -81,8 +83,7 @@
 		"Address": {
 			"city": "St.Petersburg",
 			"street": "Leninskii prospect",
-			"houseNumber": "9, 9/2, 9 lit.A, 10-99",
-			"zipCode": 198255
+			"houseNumber": "9, 9/2, 9 lit.A, 10-99"
 		}
 	}
 ]

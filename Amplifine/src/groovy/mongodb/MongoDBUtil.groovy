@@ -9,13 +9,17 @@ class MongoDBUtil {
     private static final String DB_NAME = "test"
 
     private static client
+    private static db
 
     public static MongoDatabase getDB() {
         if (!client) {
             client = new MongoClient(HOST, PORT)
         }
 
-        def db = client.getDatabase(DB_NAME)
+        if (!db) {
+            db = client.getDatabase(DB_NAME)
+        }
+
         return db
     }
 }

@@ -71,7 +71,6 @@ class WorkersGenerator implements MongoGenerator {
 
     Boolean insertAll() {
         def db = MongoDBUtil.getDB()
-        db.getCollection("workers").drop()
 
         def record
 

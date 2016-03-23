@@ -3,6 +3,7 @@ package amplifine
 import amplifine.gen.MongoGenerator
 import amplifine.gen.tables.GoodsGenerator
 import amplifine.gen.tables.ShopsGenerator
+import amplifine.gen.tables.WorkersGenerator
 import amplifine.utils.TypesUtil
 import mongodb.MongoDBUtil
 
@@ -50,15 +51,15 @@ class GeneratorController {
         Integer goodsCount = TypesUtil.parseInt(count)
 
         if (goodsCount != null) {
-            String[] collections = ["goods", "shops"]
-            MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator()]
+            String[] collections = ["goods", "shops", "workers"]
+            MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator(), new WorkersGenerator()]
 
-            collections.each {
-                db.getCollection(it).deleteMany([:])
+            for (it in collections) {
+                db.getCollection(it).drop()
             }
             notify << "Коллекции усечены"
 
-            generators.each {
+            for (it in generators) {
                 it.insertAll()
             }
             notify << "Значения вставлены"

@@ -30,7 +30,6 @@ class ShopsGenerator implements MongoGenerator {
 
     Boolean insertAll() {
         def db = MongoDBUtil.getDB()
-        db.getCollection("shops").drop()
 
         def record
 
