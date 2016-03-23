@@ -18,7 +18,7 @@ class Unitsales implements Generator {
         int goods = GoodsGenerator.getMaxPossibleRecords()
         Ring rg = new Ring(0, goods - 1, rn.nextInt(goods))
 
-        Sales.d.eachWithIndex { val, i ->
+        SalesGenerator.d.eachWithIndex { val, i ->
 
             (1..rn.nextInt(5)+5).each {
 

@@ -1,14 +1,8 @@
 package amplifine.gen.dictionaries
 
-import groovy.transform.Canonical
+import amplifine.gen.data.ManufacturerData
 
-@Canonical
-class ManufacturerData {
-    String name = "Noname"
-    String country = "USA"
-}
-
-class Manufacturers {
+class ManufacturersDictionary {
     static ManufacturerData[] data = [
             ["Fender", "USA"],
             ["Squier", "China"],

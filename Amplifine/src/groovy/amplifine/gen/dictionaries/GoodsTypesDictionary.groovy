@@ -15,6 +15,15 @@ class GoodsTypesDictionary {
         return data.size()
     }
 
+    static float getPrice() {
+        Random rn = new Random(System.nanoTime());
+
+        float minPrice = 10000.0f
+        float maxPrice = 50000.0f
+
+        return rn.nextFloat() * (maxPrice - minPrice) + minPrice
+    }
+
     static String getAnyType() {
         Random rn = new Random(System.nanoTime());
 

@@ -1,19 +1,12 @@
 package amplifine.gen.tables
 
 import amplifine.gen.MongoGenerator
-import groovy.transform.Canonical
+import amplifine.gen.data.ShopData
 import mongodb.MongoDBUtil
-
-@Canonical
-class ShopsData {
-    String name = null
-    Map address = [:]
-    String tel = null
-}
 
 class ShopsGenerator implements MongoGenerator {
 
-    static ShopsData[] data = [
+    static ShopData[] data = [
             [name: "General Music Store", address: [city: "Calimport", street: "Proletary street", house: "20, 1"], tel: "88135557070"],
             [name: "North Cither", address: [city: "Waterdeep", street: "Line-3 ave", house: "11, 345-5"], tel: "88125550002"],
             [name: "Syntesis", address: [city: "Boomtown", street: "Radical street 1", house: "110-2"], tel: "88125553412"],

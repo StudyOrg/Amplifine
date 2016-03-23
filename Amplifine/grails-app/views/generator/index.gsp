@@ -37,7 +37,7 @@
         </ul>
         <div class="form-group">
             <label>Количество товаров</label>
-            <input type="text" name="count" class="form-control" value="10000"/>
+            <input type="text" name="count" class="form-control" value="200"/>
             <p class="help-block">Количество товаров влияет на количество продаж и поставок</p>
         </div>
         <div class="form-group">
@@ -51,6 +51,7 @@
     <p><strong>Товаров</strong>: ${db.getCollection("goods").count()}</p>
     <p><strong>Магазинов</strong>: ${db.getCollection("shops").count()}</p>
     <p><strong>Сотрудников</strong>: ${db.getCollection("workers").count()}</p>
+    <p><strong>Продажи</strong>: ${db.getCollection("sales").count()}</p>
 </div>
 </body>
 </html>

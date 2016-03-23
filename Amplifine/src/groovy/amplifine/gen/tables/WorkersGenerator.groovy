@@ -1,30 +1,10 @@
 package amplifine.gen.tables
 
-import groovy.transform.Canonical
-
 import amplifine.gen.MongoGenerator
 import mongodb.MongoDBUtil
 
-@Canonical
-class WorkersData {
-    String name
-    String surname
-
-    Map documents
-
-    String city
-
-    Date birthday
-    Date fired
-}
-
 class WorkersGenerator implements MongoGenerator {
-
     def data = []
-
-    int getMaxPossibleRecords() {
-        return data.size()
-    }
 
     WorkersGenerator() {
         def names = [

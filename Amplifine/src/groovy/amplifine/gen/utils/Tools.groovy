@@ -18,6 +18,10 @@ class Tools {
         return bracket + str + bracket;
     }
 
+    static Integer randomInRange(Random rn, Integer min, Integer max) {
+        rn.nextInt(max - min + 1) + min
+    }
+
     @Deprecated
     static String getSqlInsert(String table_name, ArrayList<DataPair> data, Boolean addSemicolon) {
 

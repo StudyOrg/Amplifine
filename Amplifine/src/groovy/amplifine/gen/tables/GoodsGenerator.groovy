@@ -1,5 +1,6 @@
 package amplifine.gen.tables
 
+import amplifine.gen.data.ManufacturerData
 import amplifine.gen.dictionaries.*
 
 import amplifine.gen.MongoGenerator
@@ -7,11 +8,7 @@ import amplifine.gen.utils.Randomifier
 import mongodb.MongoDBUtil
 
 class GoodsGenerator implements MongoGenerator {
-    static def data = []
-
-    static int getMaxPossibleRecords() {
-        return data.size()
-    }
+    def data = []
 
     GoodsGenerator(Integer num) {
         Random rn = new Random(System.nanoTime());
@@ -40,7 +37,7 @@ class GoodsGenerator implements MongoGenerator {
                 def types = ["Guitar", "Bass-guitar"]
 
                 def randomType = guitars[rn.nextInt(guitars.size())]
-                ManufacturerData guitarManufacturer = Manufacturers.findByName(randomType)
+                ManufacturerData guitarManufacturer = ManufacturersDictionary.findByName(randomType)
 
                 manufacturer = guitarManufacturer.name
                 goodType = types[rn.nextInt(types.size())]
@@ -69,7 +66,7 @@ class GoodsGenerator implements MongoGenerator {
                 def fmts = ["AADDADDAA", "C N (AADDAD)", "C N AD", "J N model D (C)", "J N (C M) (ADDADA)"]
                 sn.append(gen.generateFromFormat(fmts[rn.nextInt(fmts.size())]))
                 priceCoef = 1.3
-                manufacturer = Manufacturers.anyManufacturer.name
+                manufacturer = ManufacturersDictionary.anyManufacturer.name
                 goodType = GoodsTypesDictionary.anyType
             }
 
