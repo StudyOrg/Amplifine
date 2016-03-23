@@ -1,9 +1,9 @@
-package gen.tables
+package amplifine.gen.tables
 
-import gen.Generator
-import gen.TableNamer
-import gen.utils.DataPair
-import gen.utils.Tools
+import amplifine.gen.Generator
+import amplifine.gen.TableNamer
+import amplifine.gen.utils.DataPair
+import amplifine.gen.utils.Tools
 
 class Supplies implements Generator {
 
@@ -21,7 +21,7 @@ class Supplies implements Generator {
 
         int shops = Shops.getMaxPossibleRecords()
         int supps = Suppliers.getMaxPossibleRecords()
-        int goods = Goods.getMaxPossibleRecords()
+        int goods = GoodsGenerator.getMaxPossibleRecords()
 
         for( int i = 0; i < goods / supps; i++ ) {
 

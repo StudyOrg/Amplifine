@@ -1,11 +1,10 @@
-package gen.tables
+package amplifine.gen.tables
 
-import gen.Generator
-import gen.TableNamer
-import gen.utils.DataPair
-import gen.utils.Ring
-import gen.utils.Tools
-import javafx.scene.control.Tab
+import amplifine.gen.Generator
+import amplifine.gen.TableNamer
+import amplifine.gen.utils.DataPair
+import amplifine.gen.utils.Ring
+import amplifine.gen.utils.Tools
 
 class WorkingDays implements Generator {
 

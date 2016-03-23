@@ -1,6 +1,6 @@
-package gen.utils
+package amplifine.gen.dictionaries
 
-class ModelsWordbook {
+class ModelsDictionary {
 
     static String[] adjectives = [
             "Crazy",

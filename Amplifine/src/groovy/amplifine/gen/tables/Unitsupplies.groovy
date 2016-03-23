@@ -1,9 +1,9 @@
-package gen.tables
+package amplifine.gen.tables
 
-import gen.Generator
-import gen.TableNamer
-import gen.utils.DataPair
-import gen.utils.Tools
+import amplifine.gen.Generator
+import amplifine.gen.TableNamer
+import amplifine.gen.utils.DataPair
+import amplifine.gen.utils.Tools
 
 class Unitsupplies implements Generator {
 
@@ -16,7 +16,7 @@ class Unitsupplies implements Generator {
 
         Random rn = new Random(System.nanoTime());
 
-        Goods.d.eachWithIndex { val, i ->
+        GoodsGenerator.data.eachWithIndex { val, i ->
 
             int idSupply = rn.nextInt(numOfSupps) + TableNamer.OFFSET
             int idGood = i + TableNamer.OFFSET

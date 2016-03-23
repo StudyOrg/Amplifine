@@ -1,4 +1,6 @@
-package gen.utils
+package amplifine.gen.utils
+
+import amplifine.gen.dictionaries.ModelsDictionary
 
 class Randomifier {
 
@@ -9,35 +11,35 @@ class Randomifier {
     }
 
     public getColour() {
-        return ModelsWordbook.colours[rn.nextInt(ModelsWordbook.colours.size())]
+        return ModelsDictionary.colours[rn.nextInt(ModelsDictionary.colours.size())]
     }
 
     public getNoun() {
-        return ModelsWordbook.nouns[rn.nextInt(ModelsWordbook.nouns.size())]
+        return ModelsDictionary.nouns[rn.nextInt(ModelsDictionary.nouns.size())]
     }
 
     public getAdjective() {
-        return ModelsWordbook.adjectives[rn.nextInt(ModelsWordbook.adjectives.size())]
+        return ModelsDictionary.adjectives[rn.nextInt(ModelsDictionary.adjectives.size())]
     }
 
     public getMaterial() {
-        return ModelsWordbook.materials[rn.nextInt(ModelsWordbook.materials.size())]
+        return ModelsDictionary.materials[rn.nextInt(ModelsDictionary.materials.size())]
     }
 
     public getAccessories() {
         StringBuilder str = new StringBuilder()
         def dice = rn.nextInt(1000)
-        float coef = (ModelsWordbook.bands.size() * ModelsWordbook.books.size()) / ModelsWordbook.accessories.size()
+        float coef = (ModelsDictionary.bands.size() * ModelsDictionary.books.size()) / ModelsDictionary.accessories.size()
         if(dice in 0..(500 * coef)) {
             str.append(
                     String.format("%s - %s",
-                            ModelsWordbook.bands[rn.nextInt(ModelsWordbook.bands.size())],
-                            ModelsWordbook.books[rn.nextInt(ModelsWordbook.books.size())]
+                            ModelsDictionary.bands[rn.nextInt(ModelsDictionary.bands.size())],
+                            ModelsDictionary.books[rn.nextInt(ModelsDictionary.books.size())]
                     )
             )
         } else {
             str.append(
-                    ModelsWordbook.accessories[rn.nextInt(ModelsWordbook.accessories.size())]
+                    ModelsDictionary.accessories[rn.nextInt(ModelsDictionary.accessories.size())]
             )
         }
         return str.toString()

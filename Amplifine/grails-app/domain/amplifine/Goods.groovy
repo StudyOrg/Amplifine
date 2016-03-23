@@ -9,8 +9,6 @@ class Goods {
     String manufacturer
     String model
 
-    String color
-    String material
     String type
 
     BigDecimal retailPrice
@@ -29,8 +27,5 @@ class Goods {
         type(nullable: false)
 
         retailPrice(nullable: false)
-
-        color(nullable: true, blank: true)
-        material(nullable: true, blank: true)
     }
 }

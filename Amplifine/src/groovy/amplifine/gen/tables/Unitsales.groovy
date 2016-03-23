@@ -1,10 +1,10 @@
-package gen.tables
+package amplifine.gen.tables
 
-import gen.Generator
-import gen.TableNamer
-import gen.utils.DataPair
-import gen.utils.Ring
-import gen.utils.Tools
+import amplifine.gen.Generator
+import amplifine.gen.TableNamer
+import amplifine.gen.utils.DataPair
+import amplifine.gen.utils.Ring
+import amplifine.gen.utils.Tools
 
 class Unitsales implements Generator {
 
@@ -15,7 +15,7 @@ class Unitsales implements Generator {
     Unitsales() {
 
         Random rn = new Random(System.nanoTime());
-        int goods = Goods.getMaxPossibleRecords()
+        int goods = GoodsGenerator.getMaxPossibleRecords()
         Ring rg = new Ring(0, goods - 1, rn.nextInt(goods))
 
         Sales.d.eachWithIndex { val, i ->
@@ -28,7 +28,7 @@ class Unitsales implements Generator {
                         id_good: goodId + TableNamer.OFFSET,
                         id_sale: i + TableNamer.OFFSET,
                         amount: rn.nextInt(20) + 1,
-                        full_retail_price: Goods.d[goodId].retail_price
+                        full_retail_price: GoodsGenerator.data[goodId].retail_price
                 ]
 
             }

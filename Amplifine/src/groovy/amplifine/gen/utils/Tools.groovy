@@ -1,11 +1,8 @@
-package gen.utils
+package amplifine.gen.utils
 
-import groovy.sql.Sql
-
-import javax.management.relation.RelationNotFoundException
 import java.text.SimpleDateFormat
-import java.util.Random
 
+@Deprecated
 class DataPair<T> {
     DataPair(field_name, value) {
         this.value = value
@@ -17,55 +14,11 @@ class DataPair<T> {
 
 class Tools {
 
-    static dropTables(dataSource) {
-        def sql = Sql.newInstance(dataSource)
-        def dropScriptFile = new File("db_scripts\\DropTablesScript.sql")
-
-        dropScriptFile.eachLine { line ->
-            if (line) {
-                sql.execute(line)
-                println line
-            }
-        }
-    }
-
-    static createTables(dataSource) {
-        def sql = Sql.newInstance(dataSource)
-        def createScriptFile = new File("db_scripts\\CreateTablesScript.sql")
-
-        def begin = false
-
-        def createQuery = ""
-
-        createScriptFile.eachLine { line ->
-            if (!line) {
-                createQuery = ""
-            } else if (line.endsWith(";")) {
-                if (line == "end;") {
-                    line = " " + line + ";"
-                    begin = false
-                }
-
-                if (begin) {
-                    createQuery += (line + " ")
-                } else {
-                    createQuery += line.replaceFirst(";", "")
-                    //println createQuery
-                    sql.execute(createQuery)
-                }
-            } else {
-                if (line == "begin")
-                    begin = true
-
-                createQuery += (line + " ")
-            }
-        }
-    }
-
     static String wrap(String str, String bracket) {
         return bracket + str + bracket;
     }
 
+    @Deprecated
     static String getSqlInsert(String table_name, ArrayList<DataPair> data, Boolean addSemicolon) {
 
         def fields = []

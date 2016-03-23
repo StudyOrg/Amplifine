@@ -1,9 +1,9 @@
-package gen.tables
+package amplifine.gen.tables
 
-import gen.Generator
-import gen.TableNamer
-import gen.utils.DataPair
-import gen.utils.Tools
+import amplifine.gen.Generator
+import amplifine.gen.TableNamer
+import amplifine.gen.utils.DataPair
+import amplifine.gen.utils.Tools
 
 class Workers implements Generator {
 

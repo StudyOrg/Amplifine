@@ -1,4 +1,4 @@
-package gen
+package amplifine.gen
 
 interface Generator {
     static final String tableName

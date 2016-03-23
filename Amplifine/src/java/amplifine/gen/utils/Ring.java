@@ -1,4 +1,4 @@
-package gen.utils;
+package amplifine.gen.utils;
 
 public class Ring {
 

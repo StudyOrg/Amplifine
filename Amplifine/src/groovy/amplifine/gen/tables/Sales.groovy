@@ -1,9 +1,9 @@
-package gen.tables
+package amplifine.gen.tables
 
-import gen.Generator
-import gen.TableNamer
-import gen.utils.DataPair
-import gen.utils.Tools
+import amplifine.gen.Generator
+import amplifine.gen.TableNamer
+import amplifine.gen.utils.DataPair
+import amplifine.gen.utils.Tools
 
 import java.sql.Timestamp
 
@@ -21,7 +21,7 @@ class Sales implements Generator {
 
         Random rn = new Random(System.nanoTime());
 
-        for(int i = 0; i < Goods.getMaxPossibleRecords() / Workers.getMaxPossibleRecords(); i++ ) {
+        for(int i = 0; i < GoodsGenerator.getMaxPossibleRecords() / Workers.getMaxPossibleRecords(); i++ ) {
 
             def moment = WorkingDays.d[rn.nextInt(WorkingDays.getMaxPossibleRecords())]
             GregorianCalendar tradeTime = new GregorianCalendar(
