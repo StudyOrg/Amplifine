@@ -16,7 +16,7 @@
 <h1>Список генераторов</h1>
 
 <div class="col-md-4">
-    <form role="form" action="/Amplifine/generator/goods" method="post">
+    <form role="form" action="${createLink(action: "goods")}" method="post">
         <h3>Генератор товаров</h3>
         <div class="form-group">
            <label>Всего записей</label>

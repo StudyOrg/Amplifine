@@ -20,8 +20,7 @@
                 <a class="navbar-brand" href="#">Amplifine</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="/">Данные</a></li>
-                <li><a href="/Amplifine/generator/index">Генераторы</a></li>
+                <li><a href="${createLink(action: "index")}">Генераторы</a></li>
                 <li><a href="https://github.com/StudyOrg/Amplifine">Github</a></li>
             </ul>
         </div>
