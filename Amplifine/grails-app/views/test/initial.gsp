@@ -8,7 +8,7 @@
     <h1>Hello, ${records.name} ${records.surname}!</h1>
     <g:if test="${records.address}">
         <g:set var="fullAddress" value="${Address.get(records.address)}"/>
-        <h2>${fullAddress.city}, ${fullAddress.street}</h2>
+        <h2>${fullAddress.city}, ${fullAddress.street} ${fullAddress.houseFlatMap ? (fullAddress.houseFlatMap.house + "-" + fullAddress.houseFlatMap.flat + "-" + fullAddress.houseFlatMap.testMes) : ""}</h2>
     </g:if>
 </body>
 </html>
