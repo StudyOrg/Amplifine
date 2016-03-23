@@ -3,8 +3,6 @@
 # suggested that you use the "grails integrate-with --git" command
 # to generate your .gitignore file.
 
-.gitignore
-
 # web application files
 /web-app/WEB-INF/classes
 
@@ -46,6 +44,7 @@ Amplifine/*.iws
 
 # Target
 Amplifine/target/
+Amplifine/.slcache/
 
 # IntelliJ
 Amplifine/out/
