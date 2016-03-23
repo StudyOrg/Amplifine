@@ -1,4 +1,4 @@
-<%@ page import="mongodb.MongoDBUtil; amplifine.Goods" %>
+<%@ page import="mongodb.MongoDBUtil" %>
 <g:set var="db" value="${MongoDBUtil.getDB()}"/>
 <!DOCTYPE html>
 <html>
