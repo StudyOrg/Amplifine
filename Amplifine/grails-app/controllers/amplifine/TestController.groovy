@@ -1,11 +1,16 @@
 package amplifine
 
+import com.mongodb.BasicDBList
+import com.mongodb.BasicDBObject
+import com.mongodb.DBObject
+import com.mongodb.MongoClient
+
 class TestController {
 
     def index() {
         def records = Person.getAll()
 
-        render(view: "initial", model: [records: records[2]])
+        render(view: "initial", model: [records: records[1]])
     }
 
     def make() {
@@ -47,9 +52,40 @@ class TestController {
     }
 
     def makeAddress() {
-        def map = [house:9, flat:85, testMes:"test123"]
+        def host = "localhost"
+        def port = 27017
+        def databaseName = "test"
 
-        new Address(city:"City17", street:"Street 17").save(flush: true)
+        def map1 = [house:9, flat:88, testMes:"test123"]
+        def map2 = [house:123, flat:111]
+
+        def list = []
+        list << map1
+        list << map2
+
+        def client = new MongoClient(host, port)
+        def db = client.getDatabase(databaseName)
+        db.getCollection("address") << [city:"City17", street:"Street 17", houseFlat:list]
+
+        DBObject document1 = new BasicDBObject()
+        document1.put("house", 9)
+        document1.put("flat", 85)
+        document1.put("testMes", "test123")
+
+        DBObject document2 = new BasicDBObject()
+        document2.put("house", 10)
+        document2.put("flat", 185)
+
+        def map = []
+        map2 = []
+
+        map << document1
+        map << document2
+
+        map2 << 111
+        map2 << 222
+
+        //new Address(city:"City17", street:"Street 17", houseFlatMap: map2).save(flush: true)
         new Address(city:"City17", street:"Street 18", houseFlatMap: map).save(flush: true)
         new Address(city:"City18", street:"Street 19").save(flush: true)
         new Address(city:"City17", street:"Street 20").save(flush: true)

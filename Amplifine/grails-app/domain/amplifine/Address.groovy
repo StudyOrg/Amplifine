@@ -8,7 +8,7 @@ class Address {
     String city
     String street
 
-    Map houseFlatMap
+    List houseFlatMap
 
     static mapWith = "mongo"
 
@@ -21,7 +21,5 @@ class Address {
     static constraints = {
         city(nullable: false)
         street(nullable: false)
-
-        houseFlatMap(nullable: true)
     }
 }
