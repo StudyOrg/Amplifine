@@ -9,7 +9,7 @@ class GeneratorController {
     }
 
     def goods() {
-        Integer count = params.count as Integer
+        Integer count = params.count ? params.count as Integer : null
         def notify = []
 
         if (count && count > 0) {

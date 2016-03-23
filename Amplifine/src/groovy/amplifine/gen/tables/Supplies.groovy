@@ -19,7 +19,7 @@ class Supplies implements Generator {
 
         Random rn = new Random(System.nanoTime());
 
-        int shops = Shops.getMaxPossibleRecords()
+        int shops = ShopsGenerator.getMaxPossibleRecords()
         int supps = Suppliers.getMaxPossibleRecords()
         int goods = GoodsGenerator.getMaxPossibleRecords()
 
