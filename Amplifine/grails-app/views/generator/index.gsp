@@ -52,6 +52,7 @@
     <p><strong>Магазинов</strong>: ${db.getCollection("shops").count()}</p>
     <p><strong>Сотрудников</strong>: ${db.getCollection("workers").count()}</p>
     <p><strong>Продажи</strong>: ${db.getCollection("sales").count()}</p>
+    <p><strong>Поставки</strong>: ${db.getCollection("supplies").count()}</p>
 </div>
 </body>
 </html>

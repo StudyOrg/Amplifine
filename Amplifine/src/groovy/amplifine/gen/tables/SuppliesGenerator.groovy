@@ -2,13 +2,13 @@ package amplifine.gen.tables
 
 import amplifine.gen.MongoGenerator
 import amplifine.gen.dictionaries.GoodsTypesDictionary
-import amplifine.gen.dictionaries.UsersDictionary
+import amplifine.gen.dictionaries.SupplierDictionary
 import mongodb.MongoDBUtil
 
-class SalesGenerator implements MongoGenerator {
+class SuppliesGenerator implements MongoGenerator {
     def data = []
 
-    SalesGenerator() {
+    SuppliesGenerator() {
         Random rn = new Random(System.nanoTime());
 
         def goodsRecords = MongoDBUtil.getAllRecords("goods")
@@ -16,7 +16,7 @@ class SalesGenerator implements MongoGenerator {
         def shopsRecords = MongoDBUtil.getAllRecords("shops")
 
         for (def i = 0; i < goodsRecords.size() / workersRecords.size(); i += 1.0) {
-            def customer = UsersDictionary.generateRandomUser()
+            def supplier = SupplierDictionary.generateRandomSupplier()
 
             def goods = []
             for (int j = 1; j <= rn.nextInt(10) + 1; j++) {
@@ -31,7 +31,7 @@ class SalesGenerator implements MongoGenerator {
 
             Date date = new Date()
 
-            data << [customer: customer,
+            data << [supplier: supplier,
                      goods   : goods,
                      date    : date.toString(),
                      shop    : shopsRecords[rn.nextInt(shopsRecords.size())],
@@ -48,13 +48,13 @@ class SalesGenerator implements MongoGenerator {
         for (result in data) {
             record = [:]
 
-            record << [customer: result.customer]
+            record << [supplier: result.supplier]
             record << [goods: result.goods]
             record << [date: result.date]
             record << [shop: result.shop._id['$oid']]
             record << [worker: result.worker._id['$oid']]
 
-            status = (db.getCollection("sales") << record)
+            status = (db.getCollection("supplies") << record)
             if (!status) {
                 break
             }
