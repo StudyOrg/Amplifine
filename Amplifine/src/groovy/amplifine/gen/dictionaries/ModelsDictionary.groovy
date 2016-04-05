@@ -2,69 +2,6 @@ package amplifine.gen.dictionaries
 
 class ModelsDictionary {
 
-    static String[] adjectives = [
-            "Crazy",
-            "Super",
-            "Smashed",
-            "Royal",
-            "Deep",
-            "Magnified",
-            "Power",
-            "Burned",
-            "Smoked",
-            "Drived",
-            "Irritating",
-            "Moaning",
-            "Craven",
-            "Mad",
-            "Endless",
-            "Stashed",
-            "Amazing"
-    ]
-
-    static String[] nouns = [
-            "Suitcase",
-            "Flower",
-            "Keys",
-            "Craft",
-            "Wine",
-            "Dragon",
-            "Concrete",
-            "Blowhole",
-            "String",
-            "Glimpse",
-            "Echo",
-            "Powder",
-            "Rose",
-            "Flash",
-            "Phase",
-            "Sound",
-            "Moisture"
-    ]
-
-    static String[] colours = [
-            "Red",
-            "Black",
-            "Grey",
-            "Pink",
-            "Green",
-            "Swirl",
-            "Blue"
-    ]
-
-    static String[] materials = [
-            "Metal",
-            "Polished Metal",
-            "Colored Metal",
-            "Oak",
-            "Maple",
-            "Cherry",
-            "Walnut",
-            "Rosewood",
-            "Plexiglas",
-            "Custom"
-    ]
-
     static String[] bands = [
             "Pink-Floyd",
             "Deep Purple",
