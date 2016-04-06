@@ -55,9 +55,9 @@ class GeneratorController {
         //MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator(), new WorkersGenerator()]
         MongoGenerator[] generators = [new GoodsGenerator()]
 
-        for (it in generators) {
-            it.insertAll()
-        }
+//        for (it in generators) {
+//            it.insertAll()
+//        }
 
         notify << "Базовые записи вставлены"
 

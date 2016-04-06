@@ -2,10 +2,10 @@ package amplifine.gen.dictionaries
 
 import amplifine.gen.utils.Randomifier
 
-class CheapEGDictionary {
+class AcousticGuitarsDictionary {
 
     static String[] manufacturers = [
-            "Squier", "Aria", "Chin Gach Guck", "Penco", "Samick", "Behringer", "Ashton", "Hofner", "Kustom", "Tacoma"
+            "Hofner", "Yamaha", "Ibanez", "Sigma Guitars", "Cole Clark", "Kahler", "Kremona", "Tobias", "Kay"
     ]
 
     static ArrayList<String> getModels(int num) {
@@ -16,7 +16,7 @@ class CheapEGDictionary {
         Random rn = new Random(System.nanoTime())
         Randomifier rf = new Randomifier(rn)
 
-        def patterns = ["AAA-AAD", "AADD-ADD", "ADD-AAAADDADDAAADA"]
+        def patterns = ["AADD-AAAA", "AADD-ADDAAADDADA", "ADDDDD"]
 
         while (count < num) {
             String serial = rf.generateFromFormat(patterns[rn.nextInt(patterns.size())])
@@ -35,4 +35,6 @@ class CheapEGDictionary {
 
         return brands
     }
+
+
 }

@@ -1,9 +1,11 @@
 package amplifine.gen.tables
 
 import amplifine.gen.MongoGenerator
+import amplifine.gen.dictionaries.AcousticGuitarsDictionary
 import amplifine.gen.dictionaries.CheapEGDictionary
 import amplifine.gen.dictionaries.ColoursDictionary
 import amplifine.gen.dictionaries.ExpensiveEGDictionary
+import amplifine.gen.dictionaries.KeyboardsDictionary
 import amplifine.gen.dictionaries.MaterialsDictionary
 import amplifine.gen.utils.Randomifier
 import mongodb.MongoDBUtil
@@ -61,6 +63,53 @@ class GoodsGenerator implements MongoGenerator {
                                 model       : "$j ($x $y)".toString(),
                                 manufacturer: i,
                                 type        : "Electric Guitar",
+                                retailPrice : pricePivot + rn.nextFloat() * priceBias
+                        ]
+
+                        ++counter
+                    }
+                }
+            }
+        }
+        println "Сгенерировано ${counter}"
+
+        // Генерация акустических гитар
+        print "Генерация акустических гитар... "
+        pricePivot = 15_000.0
+        priceBias = 2_000.0
+        models = AcousticGuitarsDictionary.getModels(100)
+        counter = 0
+        for (def i in AcousticGuitarsDictionary.manufacturers) {
+            for (def j in models) {
+                for (def x in ColoursDictionary.colours) {
+                    for (def y in MaterialsDictionary.materials) {
+                        data << [
+                                model       : "$j ($x $y)".toString(),
+                                manufacturer: i,
+                                type        : "Acoustic Guitar",
+                                retailPrice : pricePivot + rn.nextFloat() * priceBias
+                        ]
+
+                        ++counter
+                    }
+                }
+            }
+        }
+        println "Сгенерировано ${counter}"
+
+        // Генерация клавишных
+        print "Генерация клавишных... "
+        pricePivot = 50_000.0
+        priceBias = 30_000.0
+        counter = 0
+        for (def i in KeyboardsDictionary.manufacturers) {
+            for (def j in KeyboardsDictionary.models) {
+                for (def x in ColoursDictionary.colours) {
+                    for (def y in MaterialsDictionary.materials) {
+                        data << [
+                                model       : "$j ($x $y)".toString(),
+                                manufacturer: i,
+                                type        : "Keybords",
                                 retailPrice : pricePivot + rn.nextFloat() * priceBias
                         ]
 
