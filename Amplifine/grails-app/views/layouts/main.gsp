@@ -44,6 +44,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="${createLink(controller: "generator", action: "index")}">Генераторы</a></li>
+                <li><a href="${createLink(controller: "data", action: "textSearch")}">Поиск</a></li>
                 <li><a href="https://github.com/StudyOrg/Amplifine">Github</a></li>
             </ul>
         </div>

@@ -14,18 +14,4 @@ class ExpensiveEGDictionary {
     static String[] modelsSecondPart = [
             "Suitcase", "Flower", "Keys", "Craft", "Wine", "Dragon", "Concrete", "Blowhole", "String", "Glimpse", "Echo", "Powder", "Rose", "Flash", "Phase", "Sound", "Moisture"
     ]
-
-    static getAllCombinations() {
-        ArrayList<String> resultList = []
-
-        for (i in manufacturers) {
-            for (j in modelsFirstPart) {
-                for (k in modelsSecondPart) {
-                    resultList << i + " " + j + " " + k
-                }
-            }
-        }
-
-        return resultList
-    }
 }

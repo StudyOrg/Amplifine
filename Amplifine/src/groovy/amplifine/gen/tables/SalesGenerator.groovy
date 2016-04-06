@@ -28,9 +28,15 @@ class SalesGenerator implements MongoGenerator {
             def customer = UsersDictionary.generateRandomUser()
 
             def goods = []
-            def randomGood = goodsRecords.next()
 
             for (int j = 1; j <= rn.nextInt(10) + 1; j++) {
+                def randomGood
+
+                if (goodsRecords.hasNext())
+                    randomGood = goodsRecords.next()
+                else
+                    break
+
                 goods.push([
                         goodId     : randomGood._id,
                         description: randomGood.manufacturer + " " + randomGood.model,

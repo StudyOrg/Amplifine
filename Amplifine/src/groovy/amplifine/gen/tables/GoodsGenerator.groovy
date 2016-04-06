@@ -24,11 +24,11 @@ class GoodsGenerator implements MongoGenerator {
         print "Генерация/вставка дорогих электрогитар... "
         pricePivot = 50_000.0
         priceBias = 20_000.0
-        for (def i in ExpensiveEGDictionary.manufacturers) {
-            for (def j in ExpensiveEGDictionary.modelsFirstPart) {
-                for (def k in ExpensiveEGDictionary.modelsSecondPart) {
-                    for (def x in ColoursDictionary.colours) {
-                        for (def y in MaterialsDictionary.materials) {
+        for (def y in MaterialsDictionary.materials) {
+            for (def x in ColoursDictionary.colours) {
+                for (def j in ExpensiveEGDictionary.modelsFirstPart) {
+                    for (def k in ExpensiveEGDictionary.modelsSecondPart) {
+                        for (def i in ExpensiveEGDictionary.manufacturers) {
                             record = [:]
 
                             record << [manufacturer: i]
@@ -55,10 +55,10 @@ class GoodsGenerator implements MongoGenerator {
         priceBias = 5_000.0
         def models = CheapEGDictionary.getModels(120) //120
         counter = 0
-        for (def i in CheapEGDictionary.manufacturers) {
-            for (def j in models) {
-                for (def x in ColoursDictionary.colours) {
-                    for (def y in MaterialsDictionary.materials) {
+        for (def y in MaterialsDictionary.materials) {
+            for (def x in ColoursDictionary.colours) {
+                for (def j in models) {
+                    for (def i in CheapEGDictionary.manufacturers) {
                         record = [:]
 
                         record << [manufacturer: i]
@@ -112,10 +112,10 @@ class GoodsGenerator implements MongoGenerator {
         pricePivot = 50_000.0
         priceBias = 30_000.0
         counter = 0
-        for (def i in KeyboardsDictionary.manufacturers) {
-            for (def j in KeyboardsDictionary.models) {
-                for (def x in ColoursDictionary.colours) {
-                    for (def y in MaterialsDictionary.materials) {
+        for (def x in ColoursDictionary.colours) {
+            for (def i in KeyboardsDictionary.manufacturers) {
+                for (def y in MaterialsDictionary.materials) {
+                    for (def j in KeyboardsDictionary.models) {
                         record = [:]
 
                         record << [manufacturer: i]
