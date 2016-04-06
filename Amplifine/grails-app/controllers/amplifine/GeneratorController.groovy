@@ -7,7 +7,7 @@ import mongodb.MongoDBUtil
 
 class GeneratorController {
     def index() {
-        render(view: "index")
+        render(view: "index", model: [notify: params.notify])
     }
 
     def goods() {
@@ -50,8 +50,6 @@ class GeneratorController {
             db.getCollection(it).drop()
         }
 
-        notify << "Коллекции усечены"
-
         //MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator(), new WorkersGenerator()]
         MongoGenerator[] generators = [new GoodsGenerator()]
 
@@ -59,16 +57,14 @@ class GeneratorController {
             it.insertAll()
         }
 
-        notify << "Базовые записи вставлены"
-
         //generators = [new SalesGenerator(), new SuppliesGenerator()]
 
         //for (it in generators) {
         //    it.insertAll()
         //}
 
-        notify << "Дополнительные записи вставлены"
+        notify << "Готово"
 
-        render(view: "index", model: [notify: notify])
+        redirect(action: "index", model: [notify: notify])
     }
 }
