@@ -25,6 +25,8 @@ class SearchUtil {
     }
 
     public static Object fullTextSearch(String pattern, Integer offset) {
+        /* db.sales.ensureIndex( {"$**": "text"} ) NEED FOR FULL TEXT SEARCH*/
+
         def salesCollection = MongoDBUtil.DB.getCollection("sales")
 
         def search = replaceCyrillicChars(pattern)

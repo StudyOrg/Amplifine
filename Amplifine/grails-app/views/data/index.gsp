@@ -22,7 +22,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-9">
         <g:if test="${result && result.size() > 0}">
             <h3>Результат поиска</h3>
             <g:each in="${result}" var="row">

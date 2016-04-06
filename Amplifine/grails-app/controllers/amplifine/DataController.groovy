@@ -1,8 +1,6 @@
 package amplifine
 
 import amplifine.utils.SearchUtil
-import com.mongodb.BasicDBObject
-import com.mongodb.DBObject
 import mongodb.MongoDBUtil
 import org.bson.Document
 import org.bson.types.ObjectId
@@ -16,6 +14,11 @@ class DataController {
     def textSearch() {
         def offset = (params.offset ? Integer.parseInt(params.offset) : 0)
         def pattern = params.search
+
+        if (!pattern) {
+            index()
+            return
+        }
 
         def fullTextSearch = SearchUtil.fullTextSearch(params.search, offset)
         def rxTextSearch = null
