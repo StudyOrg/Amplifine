@@ -22,13 +22,12 @@ class SearchUtil {
         return StringUtils.replaceChars(str, LATIN_CHARS, CYRILLIC_CHARS)
     }
 
-    public static Map getGoodDescription(String id) {
+    public static Map getGoodDescription(ObjectId id) {
         def goodsCollection = MongoDBUtil.DB.getCollection("goods")
         Map good = [:]
 
         if (goodsList && goodsList.size() > 0) {
-            def objectId = new ObjectId(id.toString())
-            good = goodsList.find {it._id == objectId}
+            good = goodsList.find { it._id == id }
         }
 
         if (!good) {
@@ -71,7 +70,7 @@ class SearchUtil {
             paginateList << newPage
         }
 
-        if (!paginateList.find {it.num == pages}) {
+        if (!paginateList.find { it.num == pages }) {
             paginateList << lastPage
         }
 
