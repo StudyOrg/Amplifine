@@ -1,6 +1,8 @@
 package amplifine
 
 import amplifine.utils.SearchUtil
+import com.mongodb.BasicDBObject
+import com.mongodb.DBObject
 import mongodb.MongoDBUtil
 import org.bson.Document
 import org.bson.types.ObjectId
@@ -12,29 +14,25 @@ class DataController {
     }
 
     def textSearch() {
-        def salesCollection = MongoDBUtil.DB.getCollection("sales")
-
-        def searchRx = '^' + SearchUtil.replaceCyrillicChars(params.search)
-        def searchRxCyrillic = '^' + SearchUtil.replaceLatinChars(params.search)
-
         def offset = (params.offset ? Integer.parseInt(params.offset) : 0)
+        def pattern = params.search
 
-        def searchMap = ["goods.description": [$regex: searchRx, $options: 'i']]
-        def searchMapCyrillic = ["goods.description": [$regex: searchRxCyrillic, $options: 'i']]
+        def fullTextSearch = SearchUtil.fullTextSearch(params.search, offset)
+        def rxTextSearch = null
 
-        def result = []
-        def resultCyrillic = []
-
-        result += salesCollection.find(searchMap).skip(offset).limit(SearchUtil.LIMIT).asList()
-
-        if (searchRx != searchRxCyrillic) {
-            resultCyrillic += salesCollection.find(searchMapCyrillic).skip(offset).limit(SearchUtil.LIMIT).asList()
+        if (!fullTextSearch || (fullTextSearch.list && fullTextSearch.list.size() < 1)) {
+            rxTextSearch = SearchUtil.regexTextSearch(params.search, offset)
         }
 
-        def searchResult = (result.size() > resultCyrillic.size() ? result : resultCyrillic)
-        def searchString = (result.size() > resultCyrillic.size() ? searchRx : searchRxCyrillic).replace("^", "")
+        def searchResult = (fullTextSearch && fullTextSearch.list.size() > 0 ? fullTextSearch.list :
+                (rxTextSearch && rxTextSearch.list.size() > 0 ? rxTextSearch.list : []))
 
-        def size = salesCollection.find((result.size() > resultCyrillic.size() ? searchMap : searchMapCyrillic)).size()
+        pattern = (fullTextSearch && fullTextSearch.pattern ? fullTextSearch.pattern :
+                (rxTextSearch && rxTextSearch.pattern ? rxTextSearch.pattern : pattern))
+
+        def size = (fullTextSearch && fullTextSearch.size ? fullTextSearch.size :
+                (rxTextSearch && rxTextSearch.size ? rxTextSearch.size : 0))
+
 
         def groupByShops = searchResult.groupBy { it.shop }
 
@@ -47,6 +45,6 @@ class DataController {
             newShopsMap.put(shop, groupByShops[key])
         }
 
-        render(view: "index", model: [result: newShopsMap, search: searchString, size: size, offset: offset])
+        render(view: "index", model: [result: newShopsMap, search: pattern, size: size, offset: offset])
     }
 }

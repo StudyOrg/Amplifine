@@ -1,5 +1,7 @@
 package amplifine.utils
 
+import com.mongodb.BasicDBObject
+import com.mongodb.DBObject
 import mongodb.MongoDBUtil
 import org.apache.commons.lang.StringUtils
 import org.bson.Document
@@ -20,6 +22,62 @@ class SearchUtil {
 
     public static String replaceLatinChars(String str) {
         return StringUtils.replaceChars(str, LATIN_CHARS, CYRILLIC_CHARS)
+    }
+
+    public static Object fullTextSearch(String pattern, Integer offset) {
+        def salesCollection = MongoDBUtil.DB.getCollection("sales")
+
+        def search = replaceCyrillicChars(pattern)
+        def searchCyrillic = replaceLatinChars(pattern)
+
+        DBObject findCommand = new BasicDBObject("\$text",
+                new BasicDBObject("\$search", search))
+        DBObject findCommandCyrillic = new BasicDBObject("\$text",
+                new BasicDBObject("\$search", searchCyrillic))
+
+        DBObject projectCommand = new BasicDBObject("score", new BasicDBObject("\$meta", "textScore"))
+
+        DBObject sortCommand = new BasicDBObject("score", new BasicDBObject("\$meta", "textScore"))
+
+        def result = salesCollection.find(findCommand, projectCommand).sort(sortCommand).skip(offset).limit(LIMIT).asList()
+        def resultCyrillic = salesCollection.find(findCommandCyrillic, projectCommand).sort(sortCommand).skip(offset).limit(LIMIT).asList()
+
+        def returnList = []
+        def returnPattern = ""
+
+        if (result || resultCyrillic) {
+            returnList = (result.size() > resultCyrillic.size() ? result : resultCyrillic)
+            returnPattern = (result.size() > resultCyrillic.size() ? search : searchCyrillic)
+        }
+
+        def totalSize = salesCollection.find((result.size() > resultCyrillic.size() ? findCommand : findCommandCyrillic)).size()
+
+        return [list: returnList, pattern: returnPattern, size: totalSize]
+    }
+
+    public static Object regexTextSearch(String pattern, Integer offset) {
+        def salesCollection = MongoDBUtil.DB.getCollection("sales")
+
+        def search = replaceCyrillicChars(pattern)
+        def searchCyrillic = replaceLatinChars(pattern)
+
+        def searchMap = ["goods.description": [$regex: '^' + search, $options: 'i']]
+        def searchMapCyrillic = ["goods.description": [$regex: '^' + searchCyrillic, $options: 'i']]
+
+        def result = salesCollection.find(searchMap).skip(offset).limit(LIMIT).asList()
+        def resultCyrillic = salesCollection.find(searchMapCyrillic).skip(offset).limit(LIMIT).asList()
+
+        def returnList = []
+        def returnPattern = ""
+
+        if (result || resultCyrillic) {
+            returnList = (result.size() > resultCyrillic.size() ? result : resultCyrillic)
+            returnPattern = (result.size() > resultCyrillic.size() ? search : searchCyrillic)
+        }
+
+        def totalSize = salesCollection.find((result.size() > resultCyrillic.size() ? searchMap : searchMapCyrillic)).size()
+
+        return [list: returnList, pattern: returnPattern, size: totalSize]
     }
 
     public static Map getGoodDescription(ObjectId id) {
@@ -49,7 +107,6 @@ class SearchUtil {
         def paginateList = []
 
         def firstPage = [num: 1, offset: 0]
-        def lastPage = [num: pages, offset: collectionSize - LIMIT]
 
         paginateList << firstPage
 
@@ -68,10 +125,6 @@ class SearchUtil {
         for (def i = currentPage + 1; i < pages && i <= currentPage + 2; i++) {
             def newPage = [num: i, offset: ((i - 1) * LIMIT)]
             paginateList << newPage
-        }
-
-        if (!paginateList.find { it.num == pages }) {
-            paginateList << lastPage
         }
 
         return paginateList
