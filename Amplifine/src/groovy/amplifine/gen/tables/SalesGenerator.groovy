@@ -15,7 +15,9 @@ class SalesGenerator implements MongoGenerator {
         def workersRecords = MongoDBUtil.getAllRecords("workers")
         def shopsRecords = MongoDBUtil.getAllRecords("shops")
 
-        for (def i = 0; i < goodsRecords.size() / workersRecords.size(); i += 1.0) {
+        println "Генерация продаж..."
+
+        for (def i = 0; i < goodsRecords.size() / 4; i += 1.0) {
             def customer = UsersDictionary.generateRandomUser()
 
             def goods = []
@@ -37,12 +39,17 @@ class SalesGenerator implements MongoGenerator {
                      shop    : shopsRecords[rn.nextInt(shopsRecords.size())],
                      worker  : workersRecords[rn.nextInt(workersRecords.size())]]
         }
+
+        println "Перемешивание продаж..."
+        Collections.shuffle(data)
     }
 
     Boolean insertAll() {
         def db = MongoDBUtil.getDB()
 
         def record
+
+        println "Вставка продаж..."
 
         Boolean status = true
         for (result in data) {

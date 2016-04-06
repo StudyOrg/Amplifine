@@ -54,6 +54,8 @@ class WorkersGenerator implements MongoGenerator {
 
         def record
 
+        println "Вставка сотрудников..."
+
         Boolean status = true
         for (result in data) {
             record = [:]

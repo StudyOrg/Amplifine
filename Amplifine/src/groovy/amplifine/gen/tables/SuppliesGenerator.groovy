@@ -15,7 +15,9 @@ class SuppliesGenerator implements MongoGenerator {
         def workersRecords = MongoDBUtil.getAllRecords("workers")
         def shopsRecords = MongoDBUtil.getAllRecords("shops")
 
-        for (def i = 0; i < goodsRecords.size() / workersRecords.size(); i += 1.0) {
+        println "Генерация поставок..."
+
+        for (def i = 0; i < goodsRecords.size() / 5; i += 1.0) {
             def supplier = SupplierDictionary.generateRandomSupplier()
 
             def goods = []
@@ -43,6 +45,8 @@ class SuppliesGenerator implements MongoGenerator {
         def db = MongoDBUtil.getDB()
 
         def record
+
+        println "Вставка поставок..."
 
         Boolean status = true
         for (result in data) {

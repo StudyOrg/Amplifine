@@ -1,7 +1,7 @@
 package amplifine
 
 import amplifine.gen.MongoGenerator
-import amplifine.gen.tables.GoodsGenerator
+import amplifine.gen.tables.*
 import amplifine.utils.TypesUtil
 import mongodb.MongoDBUtil
 
@@ -41,7 +41,7 @@ class GeneratorController {
     }
 
     def all() {
-        def notify = []
+        ArrayList<String> notify = []
 
         def db = MongoDBUtil.getDB()
         String[] collections = ["goods", "shops", "workers", "sales", "supplies"]
@@ -50,21 +50,26 @@ class GeneratorController {
             db.getCollection(it).drop()
         }
 
-        //MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator(), new WorkersGenerator()]
-        MongoGenerator[] generators = [new GoodsGenerator()]
+        println ">>> Генерация основных записей"
+
+        MongoGenerator[] generators = [new GoodsGenerator(), new ShopsGenerator(), new WorkersGenerator()]
 
         for (it in generators) {
             it.insertAll()
         }
 
-        //generators = [new SalesGenerator(), new SuppliesGenerator()]
+        println ">>> Генерация дополнительных записей"
 
-        //for (it in generators) {
-        //    it.insertAll()
-        //}
+        generators = [new SalesGenerator(), new SuppliesGenerator()]
+
+        for (it in generators) {
+            it.insertAll()
+        }
+
+        println "Все записи вставлены"
 
         notify << "Готово"
 
-        redirect(action: "index", model: [notify: notify])
+        redirect(action: "index", params: [notify: notify])
     }
 }

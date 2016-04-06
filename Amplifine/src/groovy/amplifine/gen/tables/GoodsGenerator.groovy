@@ -1,12 +1,7 @@
 package amplifine.gen.tables
 
 import amplifine.gen.MongoGenerator
-import amplifine.gen.dictionaries.AcousticGuitarsDictionary
-import amplifine.gen.dictionaries.CheapEGDictionary
-import amplifine.gen.dictionaries.ColoursDictionary
-import amplifine.gen.dictionaries.ExpensiveEGDictionary
-import amplifine.gen.dictionaries.KeyboardsDictionary
-import amplifine.gen.dictionaries.MaterialsDictionary
+import amplifine.gen.dictionaries.*
 import amplifine.gen.utils.Randomifier
 import mongodb.MongoDBUtil
 
@@ -53,7 +48,7 @@ class GoodsGenerator implements MongoGenerator {
         print "Генерация дешевых электрогитар... "
         pricePivot = 20_000.0
         priceBias = 5_000.0
-        def models = CheapEGDictionary.getModels(120)
+        def models = CheapEGDictionary.getModels(20) //120
         counter = 0
         for (def i in CheapEGDictionary.manufacturers) {
             for (def j in models) {
@@ -77,7 +72,7 @@ class GoodsGenerator implements MongoGenerator {
         print "Генерация акустических гитар... "
         pricePivot = 15_000.0
         priceBias = 2_000.0
-        models = AcousticGuitarsDictionary.getModels(100)
+        models = AcousticGuitarsDictionary.getModels(20) //100
         counter = 0
         for (def i in AcousticGuitarsDictionary.manufacturers) {
             for (def j in models) {
@@ -120,6 +115,7 @@ class GoodsGenerator implements MongoGenerator {
         }
         println "Сгенерировано ${counter}"
 
+        println "Перемешивание товаров..."
         Collections.shuffle(data)
     }
 
@@ -127,6 +123,8 @@ class GoodsGenerator implements MongoGenerator {
         def db = MongoDBUtil.getDB()
 
         def record
+
+        println "Вставка товаров..."
 
         Boolean status = true
         data.eachWithIndex { result, i ->

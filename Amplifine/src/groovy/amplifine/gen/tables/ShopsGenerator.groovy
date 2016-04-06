@@ -13,7 +13,7 @@ class ShopsGenerator implements MongoGenerator {
             [name: "Mad Guitars", address: [city: "Calimport", street: "Round ave", house: "45-2"], tel: "88125559987"],
             [name: "Music Stuff", address: [city: "City 17", street: "Line-2 ave", house: "123-32A"], tel: "012"],
             [name: "Classique", address: [city: "Detroit", street: "Central street", house: "1-B"], tel: "88125550001"],
-                [name: "Deep Bass", address: [city: "City 17", street: "Lowpass street", house: "4-22"], tel: "88125550405"],
+            [name: "Deep Bass", address: [city: "City 17", street: "Lowpass street", house: "4-22"], tel: "88125550405"],
             [name: "Sweet Sound House", address: [city: "Northumberland", street: "Lowland ave", house: "1-88"], tel: "+3634325550405"]
     ]
 
@@ -25,6 +25,8 @@ class ShopsGenerator implements MongoGenerator {
         def db = MongoDBUtil.getDB()
 
         def record
+
+        println "Вставка магазинов..."
 
         Boolean status = true
         for (result in data) {

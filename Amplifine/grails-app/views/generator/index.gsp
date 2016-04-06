@@ -8,6 +8,9 @@
 </head>
 
 <body>
+<g:if test="${notify instanceof String}">
+    <g:set var="notify" value="${[notify]}"/>
+</g:if>
 <g:each in="${notify}" var="i">
     <div class="alert alert-success">
         ${i}
