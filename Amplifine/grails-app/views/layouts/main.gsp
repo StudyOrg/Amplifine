@@ -12,8 +12,31 @@
 </head>
 
 <body>
+<style>
+    .container {
+        max-width: 1200px;
+    }
+
+    .jumbotron {
+        background-image: url("${resource(dir: "images", file: "logo.png")}");
+        /*width: 1200px;*/
+        height: 250px;
+        margin-bottom: 0;
+        border-radius: 0 !important;
+    }
+
+    .navbar {
+        border-radius: 0;
+        border-color: rgb(166, 41, 0);
+        border-top: none;
+    }
+</style>
 
 <div class="container">
+    <div class="jumbotron">
+
+    </div>
+
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">

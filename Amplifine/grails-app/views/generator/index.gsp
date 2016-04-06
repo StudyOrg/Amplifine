@@ -15,16 +15,10 @@
 </g:each>
 
 <div class="col-md-4">
-    <form role="form" action="${createLink(controller: "generator", action: "goods")}" method="post">
-        <h3>Генератор товаров</h3>
-        <div class="form-group">
-            <label>Количество товаров</label>
-            <input type="text" name="count" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Сгенерировать" class="btn btn-primary"/>
-        </div>
-    </form>
+    <h3>Генератор товаров</h3>
+    <p>
+        Генератор товаров отключен за неуплату
+    </p>
 </div>
 
 <div class="col-md-4">
@@ -35,11 +29,6 @@
             <li>Генерация базовых записей (магазины, товары)</li>
             <li>Генерация остальных записей (поставки, продажи)</li>
         </ul>
-        <div class="form-group">
-            <label>Количество товаров</label>
-            <input type="text" name="count" class="form-control" value="200"/>
-            <p class="help-block">Количество товаров влияет на количество продаж и поставок</p>
-        </div>
         <div class="form-group">
             <input type="submit" value="Сгенерировать" class="btn btn-danger">
         </div>
