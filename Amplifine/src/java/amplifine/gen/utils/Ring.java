@@ -1,50 +1,53 @@
 package amplifine.gen.utils;
 
-public class Ring {
+import java.util.Iterator;
+
+public class Ring implements Iterable<Integer>, Iterator<Integer> {
 
     private int maxValue;
     private int baseValue;
     private int currentValue;
 
     public Ring(int baseValue, int maxValue) {
-
         this.baseValue = baseValue;
         this.maxValue = maxValue;
         this.currentValue = baseValue;
-
     }
 
     public Ring(int baseValue, int maxValue, int beginFrom) {
-
         this.baseValue = baseValue;
         this.maxValue = maxValue;
         this.currentValue = beginFrom;
-
     }
 
-    public void setCurrentValue(int currentValue) {
-        this.currentValue = currentValue;
+    public Iterator<Integer> iterator() {
+        return this;
     }
 
-    public void setMaxValue(int maxValue) {
-        this.maxValue = maxValue;
+    public boolean hasNext() {
+        if (currentValue > maxValue) {
+            currentValue = baseValue;
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public void setBaseValue(int baseValue) {
-        this.baseValue = baseValue;
-    }
+    public Integer next() {
+        int tmp = currentValue;
+        ++currentValue;
 
-    public int getCurrentValue() {
-        return currentValue;
+        return tmp;
     }
 
     public int size() {
         return Math.abs(maxValue - baseValue);
     }
 
+    @Deprecated
     public int nextInt() {
 
-        if( currentValue > maxValue ) {
+        if (currentValue > maxValue) {
             currentValue = baseValue;
         }
 

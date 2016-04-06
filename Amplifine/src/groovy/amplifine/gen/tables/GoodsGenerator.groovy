@@ -1,89 +1,77 @@
 package amplifine.gen.tables
 
-import amplifine.gen.data.ManufacturerData
-import amplifine.gen.dictionaries.*
-
 import amplifine.gen.MongoGenerator
+import amplifine.gen.dictionaries.CheapEGDictionary
+import amplifine.gen.dictionaries.ColoursDictionary
+import amplifine.gen.dictionaries.ExpensiveEGDictionary
+import amplifine.gen.dictionaries.MaterialsDictionary
 import amplifine.gen.utils.Randomifier
 import mongodb.MongoDBUtil
 
 class GoodsGenerator implements MongoGenerator {
     def data = []
 
-    GoodsGenerator(Integer num) {
+    GoodsGenerator() {
         Random rn = new Random(System.nanoTime());
         Randomifier gen = new Randomifier(rn)
-
-        // В зависимости от производителя и типа определяется ценовой коэффициент
-        float priceCoef = 1.0
+        // Центр и радиус окрестности для цены
+        float priceBias
+        float pricePivot
 
         // Производитель и тип
         String manufacturer
         String goodType
+        int counter = 0
 
-        // Вероятности генерации конкретного типа товара
-        def rgGuitars = 0..<480
-        def rgAccessories = 480..<500
-        def rgAnother = 500..<1000
-        // Алгоритм генерирует записи товаров в зависимости от типа и производителя
-        for (int i = 0; i < num; i++) {
-            StringBuffer sn = new StringBuffer()
-            int dice = rn.nextInt(1000)
+        // Генерация дорогих электрогитар
+        print "Генерация дорогих электрогитар... "
+        pricePivot = 50_000.0
+        priceBias = 20_000.0
+        for (def i in ExpensiveEGDictionary.manufacturers) {
+            for (def j in ExpensiveEGDictionary.modelsFirstPart) {
+                for (def k in ExpensiveEGDictionary.modelsSecondPart) {
+                    for (def x in ColoursDictionary.colours) {
+                        for (def y in MaterialsDictionary.materials) {
+                            data << [
+                                    model       : "$j $k ($x $y)".toString(),
+                                    manufacturer: i,
+                                    type        : "Electric Guitar",
+                                    retailPrice : pricePivot + rn.nextFloat() * priceBias
+                            ]
 
-            // Генерируем записи для гитар и бас-гитар
-            if (dice in rgGuitars) {
-
-                def guitars = ["Fender", "Peavy", "Ibanez", "Ibanez Korea", "Roland", "Squier", "HandGuitar", "ChinaCraft"]
-                def types = ["Guitar", "Bass-guitar"]
-
-                def randomType = guitars[rn.nextInt(guitars.size())]
-                ManufacturerData guitarManufacturer = ManufacturersDictionary.findByName(randomType)
-
-                manufacturer = guitarManufacturer.name
-                goodType = types[rn.nextInt(types.size())]
-
-                if (guitarManufacturer.country in ["China", "Korea"]) {
-                    def fmts = ["AA-DDDDDD (C M)", "AD-DDAADD", "AAADAADAD", "ADDDADDD", "AD-DDDDDD"]
-                    sn.append(gen.generateFromFormat(fmts[rn.nextInt(fmts.size())]))
-                    priceCoef = 0.5
-                } else {
-                    sn.append(gen.generateUniqueName())
-                    priceCoef = 2.0
+                            ++counter
+                        }
+                    }
                 }
-
-            }
-
-            // Генерируем аксесуары
-            if (dice in rgAccessories) {
-                sn.append(gen.getAccessories())
-                manufacturer = "Dunlop"
-                goodType = "Accessory"
-                priceCoef = 0.01
-            }
-
-            // Генерируем все остальное
-            if (dice in rgAnother) {
-                def fmts = ["AADDADDAA", "C N (AADDAD)", "C N AD", "J N model D (C)", "J N (C M) (ADDADA)"]
-                sn.append(gen.generateFromFormat(fmts[rn.nextInt(fmts.size())]))
-                priceCoef = 1.3
-                manufacturer = ManufacturersDictionary.anyManufacturer.name
-                goodType = GoodsTypesDictionary.anyType
-            }
-
-
-            if (data.findIndexOf { it.name == sn.toString() } == -1) {
-                float minPrice = 10000.0f
-                float maxPrice = 50000.0f
-                float price = rn.nextFloat() * (maxPrice - minPrice) + minPrice
-
-                data << [model       : sn.toString(),
-                         manufacturer: manufacturer,
-                         type        : goodType,
-                         retailPrice : price * priceCoef]
-
-                Collections.shuffle(data, rn)
             }
         }
+        println "Сгенерировано ${counter}"
+
+        // Генерация дешевых электрогитар
+        print "Генерация дешевых электрогитар... "
+        pricePivot = 20_000.0
+        priceBias = 5_000.0
+        def models = CheapEGDictionary.getModels(120)
+        counter = 0
+        for (def i in CheapEGDictionary.manufacturers) {
+            for (def j in models) {
+                for (def x in ColoursDictionary.colours) {
+                    for (def y in MaterialsDictionary.materials) {
+                        data << [
+                                model       : "$j ($x $y)".toString(),
+                                manufacturer: i,
+                                type        : "Electric Guitar",
+                                retailPrice : pricePivot + rn.nextFloat() * priceBias
+                        ]
+
+                        ++counter
+                    }
+                }
+            }
+        }
+        println "Сгенерировано ${counter}"
+
+        Collections.shuffle(data)
     }
 
     Boolean insertAll() {
@@ -92,7 +80,7 @@ class GoodsGenerator implements MongoGenerator {
         def record
 
         Boolean status = true
-        for (result in data) {
+        data.eachWithIndex { result, i ->
             record = [:]
 
             record << [manufacturer: result.manufacturer]
@@ -102,10 +90,11 @@ class GoodsGenerator implements MongoGenerator {
 
             status = (db.getCollection("goods") << record)
             if (!status) {
-                break
+                return status
             }
         }
 
         return status
     }
+
 }

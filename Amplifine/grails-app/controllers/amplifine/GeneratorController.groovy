@@ -2,10 +2,6 @@ package amplifine
 
 import amplifine.gen.MongoGenerator
 import amplifine.gen.tables.GoodsGenerator
-import amplifine.gen.tables.SalesGenerator
-import amplifine.gen.tables.ShopsGenerator
-import amplifine.gen.tables.SuppliesGenerator
-import amplifine.gen.tables.WorkersGenerator
 import amplifine.utils.TypesUtil
 import mongodb.MongoDBUtil
 
@@ -48,34 +44,30 @@ class GeneratorController {
         def notify = []
 
         def db = MongoDBUtil.getDB()
+        String[] collections = ["goods", "shops", "workers", "sales", "supplies"]
 
-        String count = params.count
-        Integer goodsCount = TypesUtil.parseInt(count)
-
-        if (goodsCount != null) {
-            String[] collections = ["goods", "shops", "workers", "sales", "supplies"]
-
-            for (it in collections) {
-                db.getCollection(it).drop()
-            }
-            notify << "Коллекции усечены"
-
-            MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator(), new WorkersGenerator()]
-
-            for (it in generators) {
-                it.insertAll()
-            }
-            notify << "Базовые записи вставлены"
-
-            generators = [new SalesGenerator(), new SuppliesGenerator()]
-
-            for (it in generators) {
-                it.insertAll()
-            }
-            notify << "Дополнительные записи вставлены"
-        } else {
-            notify << "Количество товаров не задано, запрос отклонен."
+        for (it in collections) {
+            db.getCollection(it).drop()
         }
+
+        notify << "Коллекции усечены"
+
+        //MongoGenerator[] generators = [new GoodsGenerator(goodsCount), new ShopsGenerator(), new WorkersGenerator()]
+        MongoGenerator[] generators = [new GoodsGenerator()]
+
+        for (it in generators) {
+            it.insertAll()
+        }
+
+        notify << "Базовые записи вставлены"
+
+        //generators = [new SalesGenerator(), new SuppliesGenerator()]
+
+        //for (it in generators) {
+        //    it.insertAll()
+        //}
+
+        notify << "Дополнительные записи вставлены"
 
         render(view: "index", model: [notify: notify])
     }
