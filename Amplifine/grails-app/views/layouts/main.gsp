@@ -18,7 +18,7 @@
     }
 
     .jumbotron {
-        background-image: url("${resource(dir: "images", file: "logo.png")}");
+        background: url("${resource(dir: "images", file: "logo.png")}") center;
         /*width: 1200px;*/
         height: 250px;
         margin-bottom: 0;

@@ -3,28 +3,36 @@ package amplifine.gen.tables
 import amplifine.gen.MongoGenerator
 import amplifine.gen.dictionaries.GoodsTypesDictionary
 import amplifine.gen.dictionaries.UsersDictionary
+import com.mongodb.client.MongoCursor
+import com.mongodb.client.MongoDatabase
 import mongodb.MongoDBUtil
+import org.bson.Document
 
 class SalesGenerator implements MongoGenerator {
-    def data = []
 
     SalesGenerator() {
         Random rn = new Random(System.nanoTime());
 
-        def goodsRecords = MongoDBUtil.getAllRecords("goods")
+        // Объект базы данных
+        MongoDatabase db = MongoDBUtil.getDB()
+        boolean status
+        def record
+
+        MongoCursor<Document> goodsRecords = db.getCollection("goods").find().iterator()
         def workersRecords = MongoDBUtil.getAllRecords("workers")
         def shopsRecords = MongoDBUtil.getAllRecords("shops")
 
-        println "Генерация продаж..."
+        println "Генерация/вставка продаж..."
 
-        for (def i = 0; i < goodsRecords.size() / 4; i += 1.0) {
+        while (goodsRecords.hasNext()) {
             def customer = UsersDictionary.generateRandomUser()
 
             def goods = []
+            def randomGood = goodsRecords.next()
+
             for (int j = 1; j <= rn.nextInt(10) + 1; j++) {
-                def randomGood = goodsRecords[rn.nextInt(goodsRecords.size())]
                 goods.push([
-                        goodId     : randomGood._id['$oid'],
+                        goodId     : randomGood._id,
                         description: randomGood.manufacturer + " " + randomGood.model,
                         qty        : rn.nextInt(5) + 1,
                         retailPrice: GoodsTypesDictionary.price
@@ -33,41 +41,53 @@ class SalesGenerator implements MongoGenerator {
 
             Date date = new Date()
 
-            data << [customer: customer,
-                     goods   : goods,
-                     date    : date.toString(),
-                     shop    : shopsRecords[rn.nextInt(shopsRecords.size())],
-                     worker  : workersRecords[rn.nextInt(workersRecords.size())]]
-        }
-
-        println "Перемешивание продаж..."
-        Collections.shuffle(data)
-    }
-
-    Boolean insertAll() {
-        def db = MongoDBUtil.getDB()
-
-        def record
-
-        println "Вставка продаж..."
-
-        Boolean status = true
-        for (result in data) {
             record = [:]
 
-            record << [customer: result.customer]
-            record << [goods: result.goods]
-            record << [date: result.date]
-            record << [shop: result.shop._id['$oid']]
-            record << [worker: result.worker._id['$oid']]
+            record << [customer: customer]
+            record << [goods: goods]
+            record << [date: date.toString()]
+            record << [shop: shopsRecords[rn.nextInt(shopsRecords.size())]._id['$oid']]
+            record << [worker: workersRecords[rn.nextInt(workersRecords.size())]._id['$oid']]
 
             status = (db.getCollection("sales") << record)
             if (!status) {
                 break
             }
-        }
 
-        return status
+            for (int i = 0; i < 3; i++) {
+                if (goodsRecords.hasNext())
+                    goodsRecords.next()
+                else
+                    break
+            }
+        }
+        println "Продажи сгенерированы/вставлены"
+    }
+
+    Boolean insertAll() {
+//        def db = MongoDBUtil.getDB()
+//
+//        def record
+//
+//        println "Вставка продаж..."
+//
+//        Boolean status = true
+//        for (result in data) {
+//            record = [:]
+//
+//            record << [customer: result.customer]
+//            record << [goods: result.goods]
+//            record << [date: result.date]
+//            record << [shop: result.shop._id['$oid']]
+//            record << [worker: result.worker._id['$oid']]
+//
+//            status = (db.getCollection("sales") << record)
+//            if (!status) {
+//                break
+//            }
+//        }
+//
+//        return status
     }
 
 }

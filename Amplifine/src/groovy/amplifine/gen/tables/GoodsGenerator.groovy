@@ -2,26 +2,26 @@ package amplifine.gen.tables
 
 import amplifine.gen.MongoGenerator
 import amplifine.gen.dictionaries.*
-import amplifine.gen.utils.Randomifier
 import mongodb.MongoDBUtil
 
 class GoodsGenerator implements MongoGenerator {
-    def data = []
 
     GoodsGenerator() {
         Random rn = new Random(System.nanoTime());
-        Randomifier gen = new Randomifier(rn)
         // Центр и радиус окрестности для цены
         float priceBias
         float pricePivot
 
+        // Объект базы данных
+        def db = MongoDBUtil.getDB()
+        boolean status
+        def record
+
         // Производитель и тип
-        String manufacturer
-        String goodType
         int counter = 0
 
         // Генерация дорогих электрогитар
-        print "Генерация дорогих электрогитар... "
+        print "Генерация/вставка дорогих электрогитар... "
         pricePivot = 50_000.0
         priceBias = 20_000.0
         for (def i in ExpensiveEGDictionary.manufacturers) {
@@ -29,12 +29,17 @@ class GoodsGenerator implements MongoGenerator {
                 for (def k in ExpensiveEGDictionary.modelsSecondPart) {
                     for (def x in ColoursDictionary.colours) {
                         for (def y in MaterialsDictionary.materials) {
-                            data << [
-                                    model       : "$j $k ($x $y)".toString(),
-                                    manufacturer: i,
-                                    type        : "Electric Guitar",
-                                    retailPrice : pricePivot + rn.nextFloat() * priceBias
-                            ]
+                            record = [:]
+
+                            record << [manufacturer: i]
+                            record << [model: "$j $k ($x $y)".toString()]
+                            record << [type: "Electric Guitar"]
+                            record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
+
+                            status = (db.getCollection("goods") << record)
+                            if (!status) {
+                                throw new Exception("Иди в жопу, сказала мне база данных")
+                            }
 
                             ++counter
                         }
@@ -42,58 +47,68 @@ class GoodsGenerator implements MongoGenerator {
                 }
             }
         }
-        println "Сгенерировано ${counter}"
+        println "Сгенерировано/вставлено ${counter}"
 
         // Генерация дешевых электрогитар
-        print "Генерация дешевых электрогитар... "
+        print "Генерация/вставка дешевых электрогитар... "
         pricePivot = 20_000.0
         priceBias = 5_000.0
-        def models = CheapEGDictionary.getModels(20) //120
+        def models = CheapEGDictionary.getModels(120) //120
         counter = 0
         for (def i in CheapEGDictionary.manufacturers) {
             for (def j in models) {
                 for (def x in ColoursDictionary.colours) {
                     for (def y in MaterialsDictionary.materials) {
-                        data << [
-                                model       : "$j ($x $y)".toString(),
-                                manufacturer: i,
-                                type        : "Electric Guitar",
-                                retailPrice : pricePivot + rn.nextFloat() * priceBias
-                        ]
+                        record = [:]
+
+                        record << [manufacturer: i]
+                        record << [model: "$j ($x $y)".toString()]
+                        record << [type: "Electric Guitar"]
+                        record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
+
+                        status = (db.getCollection("goods") << record)
+                        if (!status) {
+                            throw new Exception("Иди в жопу, сказала мне база данных")
+                        }
 
                         ++counter
                     }
                 }
             }
         }
-        println "Сгенерировано ${counter}"
+        println "Сгенерировано/вставлено ${counter}"
 
         // Генерация акустических гитар
-        print "Генерация акустических гитар... "
+        print "Генерация/вставка акустических гитар... "
         pricePivot = 15_000.0
         priceBias = 2_000.0
-        models = AcousticGuitarsDictionary.getModels(20) //100
+        models = AcousticGuitarsDictionary.getModels(100) //100
         counter = 0
         for (def i in AcousticGuitarsDictionary.manufacturers) {
             for (def j in models) {
                 for (def x in ColoursDictionary.colours) {
                     for (def y in MaterialsDictionary.materials) {
-                        data << [
-                                model       : "$j ($x $y)".toString(),
-                                manufacturer: i,
-                                type        : "Acoustic Guitar",
-                                retailPrice : pricePivot + rn.nextFloat() * priceBias
-                        ]
+                        record = [:]
+
+                        record << [manufacturer: i]
+                        record << [model: "$j ($x $y)".toString()]
+                        record << [type: "Acoustic Guitar"]
+                        record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
+
+                        status = (db.getCollection("goods") << record)
+                        if (!status) {
+                            throw new Exception("Иди в жопу, сказала мне база данных")
+                        }
 
                         ++counter
                     }
                 }
             }
         }
-        println "Сгенерировано ${counter}"
+        println "Сгенерировано/вставлено ${counter}"
 
         // Генерация клавишных
-        print "Генерация клавишных... "
+        print "Генерация/вставка клавишных... "
         pricePivot = 50_000.0
         priceBias = 30_000.0
         counter = 0
@@ -101,47 +116,28 @@ class GoodsGenerator implements MongoGenerator {
             for (def j in KeyboardsDictionary.models) {
                 for (def x in ColoursDictionary.colours) {
                     for (def y in MaterialsDictionary.materials) {
-                        data << [
-                                model       : "$j ($x $y)".toString(),
-                                manufacturer: i,
-                                type        : "Keybords",
-                                retailPrice : pricePivot + rn.nextFloat() * priceBias
-                        ]
+                        record = [:]
+
+                        record << [manufacturer: i]
+                        record << [model: "$j ($x $y)".toString()]
+                        record << [type: "Keyboards"]
+                        record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
+
+                        status = (db.getCollection("goods") << record)
+                        if (!status) {
+                            throw new Exception("Иди в жопу, сказала мне база данных")
+                        }
 
                         ++counter
                     }
                 }
             }
         }
-        println "Сгенерировано ${counter}"
-
-        println "Перемешивание товаров..."
-        Collections.shuffle(data)
+        println "Сгенерировано/вставлено ${counter}"
     }
 
     Boolean insertAll() {
-        def db = MongoDBUtil.getDB()
-
-        def record
-
-        println "Вставка товаров..."
-
-        Boolean status = true
-        data.eachWithIndex { result, i ->
-            record = [:]
-
-            record << [manufacturer: result.manufacturer]
-            record << [model: result.model]
-            record << [type: result.type]
-            record << [retailPrice: result.retailPrice]
-
-            status = (db.getCollection("goods") << record)
-            if (!status) {
-                return status
-            }
-        }
-
-        return status
+        println "Вставка товаров пропускается"
     }
 
 }

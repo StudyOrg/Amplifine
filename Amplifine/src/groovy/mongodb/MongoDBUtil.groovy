@@ -1,7 +1,8 @@
 package mongodb
 
 import com.mongodb.MongoClient
-import com.mongodb.client.*
+import com.mongodb.client.MongoCursor
+import com.mongodb.client.MongoDatabase
 import groovy.json.JsonSlurper
 import org.bson.Document
 
