@@ -2,6 +2,7 @@ package amplifine.utils
 
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
+import com.mongodb.client.MongoCollection
 import mongodb.MongoDBUtil
 import org.apache.commons.lang.StringUtils
 import org.bson.Document
@@ -9,10 +10,10 @@ import org.bson.types.ObjectId
 
 class SearchUtil {
 
-    public static final Integer LIMIT = 100
-
     private static final String CYRILLIC_CHARS = "йцукенгшщзхъфывапролджэячсмитьбюёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ"
     private static final String LATIN_CHARS = "qwertyuiop[]asdfghjkl;'zxcvbnm,.`QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>~"
+
+    public static final int LIMIT = 10
 
     private static List goodsList = []
 
@@ -24,37 +25,63 @@ class SearchUtil {
         return StringUtils.replaceChars(str, LATIN_CHARS, CYRILLIC_CHARS)
     }
 
-    public static Object fullTextSearch(String pattern, Integer offset) {
-        /* db.sales.ensureIndex( {"$**": "text"} ) NEED FOR FULL TEXT SEARCH*/
+    public static String replaceAuto(String str) {
+        str.each { char ch ->
+            if (ch in ('а'..'я')) {
+                return replaceCyrillicChars(str)
+            }
+        }
 
-        def salesCollection = MongoDBUtil.DB.getCollection("sales")
+        return replaceLatinChars(str)
+    }
 
-        def search = replaceCyrillicChars(pattern)
+    /**
+     * Функция полнотекстового поиска с изменением раскладки.
+     * Правило поиска - если было найдено менее 1% от общего размера базы, пробуем искать в другой раскладке
+     * При этом если результирующий для другой раскладки больше, используем его в качестве результата
+     * @param collection
+     * @param pattern
+     * @param limit
+     * @param offset
+     * @return Результат поиск
+     */
+    public static Object fullTextSearch(String collection, String pattern, int limit, int offset) {
+        //        SearchResult result = new SearchResult()
+
+        Closure request = { String text ->
+            return ['$text': ['$search': text]]
+        }
+
+        Map requestMeta = ['$score': ['$meta': 'textScore']]
+
+        MongoCollection salesCollection = MongoDBUtil.DB.getCollection(collection)
+        int collectionSize = salesCollection.count()
+
+        // Делаем запрос с исходной раскладкой
+        def search = pattern
+        int requestResultSize = salesCollection.find(request(search), requestMeta).count()
+
         def searchCyrillic = replaceLatinChars(pattern)
 
-        DBObject findCommand = new BasicDBObject("\$text",
-                new BasicDBObject("\$search", search))
-        DBObject findCommandCyrillic = new BasicDBObject("\$text",
-                new BasicDBObject("\$search", searchCyrillic))
+        DBObject findCommand = new BasicDBObject("\$text", new BasicDBObject("\$search", search))
+        DBObject findCommandCyrillic = new BasicDBObject("\$text", new BasicDBObject("\$search", searchCyrillic))
 
         DBObject projectCommand = new BasicDBObject("score", new BasicDBObject("\$meta", "textScore"))
 
-        DBObject sortCommand = new BasicDBObject("score", new BasicDBObject("\$meta", "textScore"))
 
-        def result = salesCollection.find(findCommand, projectCommand).sort(sortCommand).skip(offset).limit(LIMIT).asList()
-        def resultCyrillic = salesCollection.find(findCommandCyrillic, projectCommand).sort(sortCommand).skip(offset).limit(LIMIT).asList()
+        def resultCyrillic = salesCollection.find(findCommandCyrillic, projectCommand).skip(offset).limit(limit).asList()
 
         def returnList = []
         def returnPattern = ""
 
-        if (result || resultCyrillic) {
-            returnList = (result.size() > resultCyrillic.size() ? result : resultCyrillic)
-            returnPattern = (result.size() > resultCyrillic.size() ? search : searchCyrillic)
-        }
+//        if (result || resultCyrillic) {
+//            returnList = (result.size() > resultCyrillic.size() ? result : resultCyrillic)
+//            returnPattern = (result.size() > resultCyrillic.size() ? search : searchCyrillic)
+//        }
 
-        def totalSize = salesCollection.find((result.size() > resultCyrillic.size() ? findCommand : findCommandCyrillic)).size()
+        //def totalSize = salesCollection.find((result.size() > resultCyrillic.size() ? findCommand : findCommandCyrillic)).size()
 
-        return [list: returnList, pattern: returnPattern, size: totalSize]
+        return [list: returnList, pattern: returnPattern, size: 5]
     }
 
     public static Object regexTextSearch(String pattern, Integer offset) {

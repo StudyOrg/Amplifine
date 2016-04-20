@@ -12,18 +12,25 @@
     <div class="col-md-6">
         <h3>Поиск продаж по наименованию товара</h3>
 
-        <g:form controller="data" action="textSearch" method="post" class="form">
+        <g:form controller="data" action="textSearch" method="get" class="form">
             <div class="form-group">
-                <input type="text" id="search" name="search" value="${search == "null" || !search ? "" : search}" class="form-control" placeholder="Введите запрос"/>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <input type="submit" class="btn btn-default" value="Go!">
+                    </span>
+                    <input type="text" id="search" name="search" value="${search == "null" || !search ? "" : search}" class="form-control" placeholder="Введите запрос"/>
+                </div>
             </div>
-            <input type="submit" class="btn btn-normal btn-outline" value="Поиск"/>
         </g:form>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-9">
+    <div id="search-list" class="col-md-9">
         <g:if test="${result && result.size() > 0}">
+            <g:if test="${initialSearch != search}">
+                Исправлена раскладка клавиатуры в "${initialSearch}"
+            </g:if>
             <h3>Результат поиска</h3>
             <g:each in="${result}" var="row">
                 <b>Магазин: ${row.key.name} (${row.key.address.city}, ${row.key.address.street})</b><br/>
@@ -54,7 +61,16 @@
                     </ul>
                 </g:each>
             </g:if>
+            <script>
+                $(function() {
+                    var hilitor = new Hilitor("search-list");
+                    hilitor.apply("${search}");
+                });
+            </script>
         </g:if>
+        <g:else>
+            По запросу "<i>${initialSearch}</i>" ничего не найдено
+        </g:else>
     </div>
 </div>
 </body>

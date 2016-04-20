@@ -66,7 +66,9 @@ class GeneratorController {
             it.insertAll()
         }
 
-        println "Все записи вставлены"
+        println ">>> Добавляем индексы"
+
+        db.getCollection("sales").createIndex(["\$**": "text"])
 
         notify << "Готово"
 

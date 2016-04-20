@@ -7,6 +7,8 @@ import org.bson.types.ObjectId
 
 class DataController {
 
+    public static final int LIST_LIMIT = 10
+
     def index() {
         render(view: "index")
     }
@@ -20,7 +22,7 @@ class DataController {
             return
         }
 
-        def fullTextSearch = SearchUtil.fullTextSearch(params.search, offset)
+        def fullTextSearch = SearchUtil.fullTextSearch("sales", params.search, LIST_LIMIT, offset)
         def rxTextSearch = null
 
         if (!fullTextSearch || (fullTextSearch.list && fullTextSearch.list.size() < 1)) {
@@ -48,6 +50,6 @@ class DataController {
             newShopsMap.put(shop, groupByShops[key])
         }
 
-        render(view: "index", model: [result: newShopsMap, search: pattern, size: size, offset: offset])
+        render(view: "index", model: [result: newShopsMap, search: pattern, initialSearch: pattern, size: size, offset: offset])
     }
 }

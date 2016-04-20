@@ -20,6 +20,9 @@ class GoodsGenerator implements MongoGenerator {
         // Производитель и тип
         int counter = 0
 
+        // Предварительный список товаров
+        List<Map<?,?>> goodsList = new ArrayList<Map<?,?>>(1_100_000)
+
         // Генерация дорогих электрогитар
         print "Генерация/вставка дорогих электрогитар... "
         pricePivot = 50_000.0
@@ -36,10 +39,12 @@ class GoodsGenerator implements MongoGenerator {
                             record << [type: "Electric Guitar"]
                             record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
 
-                            status = (db.getCollection("goods") << record)
-                            if (!status) {
-                                throw new Exception("Иди в жопу, сказала мне база данных")
-                            }
+//                            status = (db.getCollection("goods") << record)
+//                            if (!status) {
+//                                throw new Exception("Иди в жопу, сказала мне база данных")
+//                            }
+
+                            goodsList.add(record)
 
                             ++counter
                         }
@@ -66,10 +71,12 @@ class GoodsGenerator implements MongoGenerator {
                         record << [type: "Electric Guitar"]
                         record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
 
-                        status = (db.getCollection("goods") << record)
-                        if (!status) {
-                            throw new Exception("Иди в жопу, сказала мне база данных")
-                        }
+//                        status = (db.getCollection("goods") << record)
+//                        if (!status) {
+//                            throw new Exception("Иди в жопу, сказала мне база данных")
+//                        }
+
+                        goodsList.add(record)
 
                         ++counter
                     }
@@ -95,10 +102,12 @@ class GoodsGenerator implements MongoGenerator {
                         record << [type: "Acoustic Guitar"]
                         record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
 
-                        status = (db.getCollection("goods") << record)
-                        if (!status) {
-                            throw new Exception("Иди в жопу, сказала мне база данных")
-                        }
+//                        status = (db.getCollection("goods") << record)
+//                        if (!status) {
+//                            throw new Exception("Иди в жопу, сказала мне база данных")
+//                        }
+
+                        goodsList.add(record)
 
                         ++counter
                     }
@@ -123,21 +132,35 @@ class GoodsGenerator implements MongoGenerator {
                         record << [type: "Keyboards"]
                         record << [retailPrice: pricePivot + rn.nextFloat() * priceBias]
 
-                        status = (db.getCollection("goods") << record)
-                        if (!status) {
-                            throw new Exception("Иди в жопу, сказала мне база данных")
-                        }
+//                        status = (db.getCollection("goods") << record)
+//                        if (!status) {
+//                            throw new Exception("Иди в жопу, сказала мне база данных")
+//                        }
+
+                        goodsList.add(record)
 
                         ++counter
                     }
                 }
             }
         }
+
+        println "Вставляем..."
+
+        Collections.shuffle(goodsList)
+
+        for (good in goodsList) {
+            status = (db.getCollection("goods") << good)
+            if (!status) {
+                throw new Exception("Возникла ошибка во время записи в базу")
+            }
+        }
+
         println "Сгенерировано/вставлено ${counter}"
     }
 
     Boolean insertAll() {
-        println "Вставка товаров пропускается"
+
     }
 
 }
