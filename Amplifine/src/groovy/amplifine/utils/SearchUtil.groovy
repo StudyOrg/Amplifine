@@ -7,6 +7,10 @@ import org.apache.commons.lang.StringUtils
 
 class SearchUtil {
 
+    public static enum SearchAlgo {
+        LEVENSHTEIN, JARO_WINKLER, LCS
+    }
+
     private static final String CYRILLIC_CHARS = "йцукенгшщзхъфывапролджэячсмитьбюёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ"
     private static final String LATIN_CHARS = "qwertyuiop[]asdfghjkl;'zxcvbnm,.`QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>~"
 
@@ -32,7 +36,18 @@ class SearchUtil {
         return replaceLatinChars(str)
     }
 
-    public static SearchResult search(String collectionName, String query, int limit, int page) {
+    public static SearchResult search(String collectionName, String query, int limit, int page, SearchAlgo algo = SearchAlgo.LEVENSHTEIN) {
+        Closure<Double> comparer = { String s1, String s2 ->
+            switch (algo) {
+                case SearchAlgo.JARO_WINKLER:
+                    return FuzzySearch.jaroWinklerSimilarity(s1, s2)
+                case SearchAlgo.LEVENSHTEIN:
+                    return FuzzySearch.levensteinSimilarity(s1, s2)
+                case SearchAlgo.LCS:
+                    return FuzzySearch.lcsSimilarity(s1, s2)
+            }
+        }
+
         MongoCollection collection = MongoDBUtil.DB.getCollection(collectionName)
 
         FindIterable iterator = collection.find()
@@ -60,9 +75,9 @@ class SearchUtil {
                     // Найти все комбинации сравнений со словами запроса
                     for (word in query.split("\\s")) {
                         // Ищем расстояние через левенштейна для исходной раскладки...
-                        double sim = FuzzySearch.levensteinSimilarity(fieldWord.toLowerCase(), word.toLowerCase())
+                        double sim = comparer(fieldWord.toLowerCase(), word.toLowerCase())
                         // ...и для альтернативной
-                        double simAlt = FuzzySearch.levensteinSimilarity(fieldWord.toLowerCase(), replaceAuto(word).toLowerCase())
+                        double simAlt = comparer(fieldWord.toLowerCase(), replaceAuto(word).toLowerCase())
                         // Выбрав наикротчайший вариант, проверяем по порогу
                         double max
                         if (sim >= simAlt) {

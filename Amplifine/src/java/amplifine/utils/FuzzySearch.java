@@ -74,15 +74,15 @@ public class FuzzySearch {
     }
 
     public static double levensteinDistance(String s1, String s2) {
-        return (double)levensteinDistanceMetric(s1, s2) / (double)Math.max(s1.length(), s2.length());
+        return (double) levensteinDistanceNumbered(s1, s2) / (double) Math.max(s1.length(), s2.length());
     }
 
     public static double levensteinSimilarity(String s1, String s2) {
         return 1.0 - levensteinDistance(s1, s2);
     }
 
-    public static int levensteinDistanceMetric(String s1, String s2) {
-        if (s1.equals(s2)){
+    public static int levensteinDistanceNumbered(String s1, String s2) {
+        if (s1.equals(s2)) {
             return 0;
         }
 
@@ -133,5 +133,42 @@ public class FuzzySearch {
         }
 
         return v0[s2.length()];
+    }
+
+    public static double lcsSimilarity(String s1, String s2) {
+        return (double) lcsLength(s1, s2) / (double) Math.max(s1.length(), s2.length());
+    }
+
+    /**
+     * Return the length of Longest Common Subsequence (LCS) between strings s1
+     */
+    protected static int lcsLength(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        char[] X = s1.toCharArray();
+        char[] Y = s2.toCharArray();
+
+        int[][] C = new int[m + 1][n + 1];
+
+        for (int i = 0; i <= m; i++) {
+            C[i][0] = 0;
+        }
+
+        for (int j = 0; j <= n; j++) {
+            C[0][j] = 0;
+        }
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (X[i - 1] == Y[j - 1]) {
+                    C[i][j] = C[i - 1][j - 1] + 1;
+
+                } else {
+                    C[i][j] = Math.max(C[i][j - 1], C[i - 1][j]);
+                }
+            }
+        }
+
+        return C[m][n];
     }
 }

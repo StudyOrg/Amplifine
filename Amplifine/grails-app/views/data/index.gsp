@@ -24,9 +24,18 @@
 
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-btn">
-                        <input type="submit" class="btn btn-default" value="Go!">
-                    </span>
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default">Go!</button>
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Расстояние Левенштайн</a></li>
+                            <li><a href="#">Расстояние Джаро-Винклера</a></li>
+                            <li><a href="#">Нахождение НОП</a></li>
+                        </ul>
+                    </div>
                     <input type="text" id="search" name="search" value="${search == "null" || !search ? "" : search}" class="form-control" placeholder="Введите запрос"/>
                 </div>
             </div>
