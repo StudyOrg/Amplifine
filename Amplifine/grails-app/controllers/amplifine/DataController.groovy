@@ -1,9 +1,6 @@
 package amplifine
 
 import amplifine.utils.SearchUtil
-import mongodb.MongoDBUtil
-import org.bson.Document
-import org.bson.types.ObjectId
 
 class DataController {
 
@@ -14,42 +11,23 @@ class DataController {
     }
 
     def textSearch() {
-        def offset = (params.offset ? Integer.parseInt(params.offset) : 0)
-        def pattern = params.search
+        int offset = (params.offset ? Integer.parseInt(params.offset) : 0)
+        String pattern = (String) params.search
 
         if (!pattern) {
             index()
             return
         }
 
-        def fullTextSearch = SearchUtil.fullTextSearch("sales", params.search, LIST_LIMIT, offset)
-        def rxTextSearch = null
+        long beginTime = System.currentTimeMillis()
 
-        if (!fullTextSearch || (fullTextSearch.list && fullTextSearch.list.size() < 1)) {
-            rxTextSearch = SearchUtil.regexTextSearch(params.search, offset)
+        List resultList = SearchUtil.search("goods", pattern, LIST_LIMIT, offset)
+        if (resultList.size() < LIST_LIMIT) {
+            offset = -1
         }
 
-        def searchResult = (fullTextSearch && fullTextSearch.list.size() > 0 ? fullTextSearch.list :
-                (rxTextSearch && rxTextSearch.list.size() > 0 ? rxTextSearch.list : []))
+        long totalTime = System.currentTimeMillis() - beginTime
 
-        pattern = (fullTextSearch && fullTextSearch.pattern ? fullTextSearch.pattern :
-                (rxTextSearch && rxTextSearch.pattern ? rxTextSearch.pattern : pattern))
-
-        def size = (fullTextSearch && fullTextSearch.size ? fullTextSearch.size :
-                (rxTextSearch && rxTextSearch.size ? rxTextSearch.size : 0))
-
-
-        def groupByShops = searchResult.groupBy { it.shop }
-
-        def newShopsMap = [:]
-
-        for (def key in groupByShops.keySet()) {
-            def query = new Document("_id", new ObjectId(key.toString()))
-            def shop = MongoDBUtil.DB.getCollection("shops").findOne(query)
-
-            newShopsMap.put(shop, groupByShops[key])
-        }
-
-        render(view: "index", model: [result: newShopsMap, search: pattern, initialSearch: pattern, size: size, offset: offset])
+        render(view: "index", model: [result: resultList, search: pattern, initialSearch: pattern, totalTime: totalTime, offset: offset])
     }
 }

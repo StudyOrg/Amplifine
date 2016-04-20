@@ -1,7 +1,6 @@
 package amplifine.utils
 
-import com.mongodb.BasicDBObject
-import com.mongodb.DBObject
+import com.mongodb.client.FindIterable
 import com.mongodb.client.MongoCollection
 import mongodb.MongoDBUtil
 import org.apache.commons.lang.StringUtils
@@ -48,7 +47,7 @@ class SearchUtil {
     public static Object fullTextSearch(String collection, String pattern, int limit, int offset) {
         //        SearchResult result = new SearchResult()
 
-        Closure request = { String text ->
+        Closure requestSearch = { String text ->
             return ['$text': ['$search': text]]
         }
 
@@ -59,17 +58,11 @@ class SearchUtil {
 
         // Делаем запрос с исходной раскладкой
         def search = pattern
-        int requestResultSize = salesCollection.find(request(search), requestMeta).count()
+        FindIterable queryResult = salesCollection.find(requestSearch(search))
 
-        def searchCyrillic = replaceLatinChars(pattern)
+        //def searchCyrillic = replaceLatinChars(pattern)
 
-        DBObject findCommand = new BasicDBObject("\$text", new BasicDBObject("\$search", search))
-        DBObject findCommandCyrillic = new BasicDBObject("\$text", new BasicDBObject("\$search", searchCyrillic))
-
-        DBObject projectCommand = new BasicDBObject("score", new BasicDBObject("\$meta", "textScore"))
-
-
-        def resultCyrillic = salesCollection.find(findCommandCyrillic, projectCommand).skip(offset).limit(limit).asList()
+        //def resultCyrillic = salesCollection.find(findCommandCyrillic, projectCommand).skip(offset).limit(limit).asList()
 
         def returnList = []
         def returnPattern = ""
@@ -82,6 +75,57 @@ class SearchUtil {
         //def totalSize = salesCollection.find((result.size() > resultCyrillic.size() ? findCommand : findCommandCyrillic)).size()
 
         return [list: returnList, pattern: returnPattern, size: 5]
+    }
+
+    public static ArrayList search(String collectionName, String query, int limit, int page) {
+        MongoCollection collection = MongoDBUtil.DB.getCollection(collectionName)
+
+        FindIterable iterator = collection.find()
+
+        final int LEVENSTEIN_THRESHOLD = 2
+
+        int skip = limit * page
+
+        List<Object> resultList = new ArrayList<>()
+
+        // Перебираем все записи в базе для заданной коллекции
+        for (it in iterator) {
+
+            // Выходим, если уже хватит
+            if (limit == 0) break
+
+            // Весовое значение для оценки релевантности
+            int weight = 0
+
+            // Перебираем все поля объекта коллекции
+            for (Map.Entry field in it) {
+                String fieldString = field.value.toString()
+                // Для всех слов в строке
+                for (fieldWord in fieldString.split("\\s")) {
+                    // Найти все комбинации сравнений со словами запроса
+                    for (word in query.split("\\s")) {
+                        // Ищем расстояние через левенштейна
+                        int len = FuzzySearch.levensteinDistance(fieldWord.toLowerCase(), word.toLowerCase())
+                        if (len <= LEVENSTEIN_THRESHOLD) {
+                            weight += LEVENSTEIN_THRESHOLD - len
+                        }
+                    }
+                }
+            }
+
+            if (weight > 0) {
+                if (skip > 0) {
+                    --skip
+                } else {
+                    resultList << [entry: it, weight: weight]
+                    --limit
+                }
+            }
+        }
+
+        resultList = resultList.sort { a, b -> (b.weight <=> a.weight) }.collect { it.entry }
+
+        return resultList
     }
 
     public static Object regexTextSearch(String pattern, Integer offset) {

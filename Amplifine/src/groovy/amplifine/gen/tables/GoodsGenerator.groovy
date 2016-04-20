@@ -24,9 +24,9 @@ class GoodsGenerator implements MongoGenerator {
         List<Map<?,?>> goodsList = new ArrayList<Map<?,?>>(1_100_000)
 
         // Генерация дорогих электрогитар
-        print "Генерация/вставка дорогих электрогитар... "
-        pricePivot = 50_000.0
-        priceBias = 20_000.0
+        print "Генерация дорогих электрогитар... "
+        pricePivot = 200_000.0
+        priceBias = 50_000.0
         for (def y in MaterialsDictionary.materials) {
             for (def x in ColoursDictionary.colours) {
                 for (def j in ExpensiveEGDictionary.modelsFirstPart) {
@@ -55,8 +55,8 @@ class GoodsGenerator implements MongoGenerator {
         println "Сгенерировано/вставлено ${counter}"
 
         // Генерация дешевых электрогитар
-        print "Генерация/вставка дешевых электрогитар... "
-        pricePivot = 20_000.0
+        print "Генерация дешевых электрогитар... "
+        pricePivot = 50_000.0
         priceBias = 5_000.0
         def models = CheapEGDictionary.getModels(120) //120
         counter = 0
@@ -86,7 +86,7 @@ class GoodsGenerator implements MongoGenerator {
         println "Сгенерировано/вставлено ${counter}"
 
         // Генерация акустических гитар
-        print "Генерация/вставка акустических гитар... "
+        print "Генерация акустических гитар... "
         pricePivot = 15_000.0
         priceBias = 2_000.0
         models = AcousticGuitarsDictionary.getModels(100) //100
@@ -117,7 +117,7 @@ class GoodsGenerator implements MongoGenerator {
         println "Сгенерировано/вставлено ${counter}"
 
         // Генерация клавишных
-        print "Генерация/вставка клавишных... "
+        print "Генерация клавишных... "
         pricePivot = 50_000.0
         priceBias = 30_000.0
         counter = 0
@@ -144,6 +144,14 @@ class GoodsGenerator implements MongoGenerator {
                 }
             }
         }
+
+        // Генерация специальных товаров
+        print "Генерация специальных... "
+        goodsList.add([manufacturer: "Dunlop", model: "Pick (Red)", type: "Accessory", retailPrice: 40])
+        goodsList.add([manufacturer: "Dunlop", model: "Pick (White)", type: "Accessory", retailPrice: 40])
+        goodsList.add([manufacturer: "Dunlop", model: "Pick (Metal)", type: "Accessory", retailPrice: 80])
+        goodsList.add([manufacturer: "Post Print", model: "The Beatles: History of the Band", type: "Book", retailPrice: 200])
+        goodsList.add([manufacturer: "Post Print", model: "Pink Floyd. Scores", type: "Book", retailPrice: 180])
 
         println "Вставляем..."
 

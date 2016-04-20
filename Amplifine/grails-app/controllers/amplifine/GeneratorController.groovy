@@ -68,7 +68,7 @@ class GeneratorController {
 
         println ">>> Добавляем индексы"
 
-        db.getCollection("sales").createIndex(["\$**": "text"])
+        db.getCollection("sales").createIndex(['$**': "text"])
 
         notify << "Готово"
 
