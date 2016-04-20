@@ -45,6 +45,11 @@ class DataController {
 
         long totalTime = System.currentTimeMillis() - beginTime
 
-        render(view: "index", model: [result: result.returnList, search: result.realPattern, initialSearch: pattern, totalTime: totalTime, offset: offset])
+        render(view: "index", model: [result       : result.returnList,
+                                      search       : result.realPattern,
+                                      initialSearch: pattern,
+                                      totalTime    : totalTime,
+                                      offset       : offset,
+                                      algo         : algoStr])
     }
 }

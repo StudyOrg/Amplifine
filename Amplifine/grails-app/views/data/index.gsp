@@ -27,7 +27,7 @@
 
         <g:form controller="data" id="search-form" action="textSearch" method="get" class="form">
             <input type="hidden" name="offset" value="${offset && offset != -1 ? offset : 0}"/>
-            <input type="hidden" name="algorithm" value="lev"/>
+            <input type="hidden" name="algorithm" value="${algo ?: "lev"}"/>
 
             <div class="form-group">
                 <div class="input-group">

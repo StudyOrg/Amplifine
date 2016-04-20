@@ -88,7 +88,7 @@ class SearchUtil {
                             --balance
                         }
                         if (max > SIMILARITY_THRESHOLD) {
-                            weight += max
+                            weight += 1.0 + max
                         }
                     }
                 }
