@@ -20,7 +20,7 @@
         <h3>Поиск по товарам</h3>
 
         <g:form controller="data" id="search-form" action="textSearch" method="get" class="form">
-            <input type="hidden" name="offset" value="${offset ?: 0}"/>
+            <input type="hidden" name="offset" value="${offset && offset != -1 ? offset : 0}"/>
 
             <div class="form-group">
                 <div class="input-group">

@@ -25,7 +25,7 @@ class SearchUtil {
     }
 
     public static String replaceAuto(String str) {
-        str.each { char ch ->
+        for (ch in str) {
             if (ch in ('а'..'я')) {
                 return replaceCyrillicChars(str)
             }
@@ -77,7 +77,7 @@ class SearchUtil {
         return [list: returnList, pattern: returnPattern, size: 5]
     }
 
-    public static ArrayList search(String collectionName, String query, int limit, int page) {
+    public static SearchResult search(String collectionName, String query, int limit, int page) {
         MongoCollection collection = MongoDBUtil.DB.getCollection(collectionName)
 
         FindIterable iterator = collection.find()
@@ -85,6 +85,7 @@ class SearchUtil {
         final int LEVENSTEIN_THRESHOLD = 2
 
         int skip = limit * page
+        int balance = 1
 
         List<Object> resultList = new ArrayList<>()
 
@@ -104,10 +105,21 @@ class SearchUtil {
                 for (fieldWord in fieldString.split("\\s")) {
                     // Найти все комбинации сравнений со словами запроса
                     for (word in query.split("\\s")) {
-                        // Ищем расстояние через левенштейна
+                        // Ищем расстояние через левенштейна для исходной раскладки...
                         int len = FuzzySearch.levensteinDistance(fieldWord.toLowerCase(), word.toLowerCase())
-                        if (len <= LEVENSTEIN_THRESHOLD) {
-                            weight += LEVENSTEIN_THRESHOLD - len
+                        // ...и для альтернативной
+                        int lenAlt = FuzzySearch.levensteinDistance(fieldWord.toLowerCase(), replaceAuto(word).toLowerCase())
+                        // Выбрав наикротчайший вариант, проверяем по порогу
+                        int min = 0
+                        if (len < lenAlt) {
+                            min = len
+                            ++balance
+                        } else {
+                            min = lenAlt
+                            --balance
+                        }
+                        if (min <= LEVENSTEIN_THRESHOLD) {
+                            weight += LEVENSTEIN_THRESHOLD - min
                         }
                     }
                 }
@@ -123,9 +135,11 @@ class SearchUtil {
             }
         }
 
-        resultList = resultList.sort { a, b -> (b.weight <=> a.weight) }.collect { it.entry }
+        SearchResult result = new SearchResult()
+        result.returnList = resultList.sort { a, b -> (b.weight <=> a.weight) }.collect { it.entry }
+        result.realPattern = balance > 0 ? query : replaceAuto(query)
 
-        return resultList
+        return result
     }
 
     public static Object regexTextSearch(String pattern, Integer offset) {

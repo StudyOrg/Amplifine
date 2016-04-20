@@ -1,5 +1,6 @@
 package amplifine
 
+import amplifine.utils.SearchResult
 import amplifine.utils.SearchUtil
 
 class DataController {
@@ -21,13 +22,13 @@ class DataController {
 
         long beginTime = System.currentTimeMillis()
 
-        List resultList = SearchUtil.search("goods", pattern, LIST_LIMIT, offset)
-        if (resultList.size() < LIST_LIMIT) {
+        SearchResult result = SearchUtil.search("goods", pattern, LIST_LIMIT, offset)
+        if (result.returnList.size() < LIST_LIMIT) {
             offset = -1
         }
 
         long totalTime = System.currentTimeMillis() - beginTime
 
-        render(view: "index", model: [result: resultList, search: pattern, initialSearch: pattern, totalTime: totalTime, offset: offset])
+        render(view: "index", model: [result: result.returnList, search: result.realPattern, initialSearch: pattern, totalTime: totalTime, offset: offset])
     }
 }
