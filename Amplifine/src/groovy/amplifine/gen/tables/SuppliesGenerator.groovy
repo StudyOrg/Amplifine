@@ -54,12 +54,12 @@ class SuppliesGenerator implements MongoGenerator {
                 break
             }
 
-            for (int i = 0; i < 3; i++) {
-                if (goodsRecords.hasNext())
-                    goodsRecords.next()
-                else
-                    break
-            }
+//            for (int i = 0; i < 3; i++) {
+//                if (goodsRecords.hasNext())
+//                    goodsRecords.next()
+//                else
+//                    break
+//            }
         }
         println "Поставки сгенерированы/вставлены"
     }

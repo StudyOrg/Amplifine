@@ -29,7 +29,7 @@ class SalesGenerator implements MongoGenerator {
 
             def goods = []
 
-            for (int j = 1; j <= rn.nextInt(10) + 1; j++) {
+            for (int j = 1; j <= rn.nextInt(5) + 1; j++) {
                 def randomGood
 
                 if (goodsRecords.hasNext())
@@ -60,7 +60,7 @@ class SalesGenerator implements MongoGenerator {
                 break
             }
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 if (goodsRecords.hasNext())
                     goodsRecords.next()
                 else

@@ -9,6 +9,12 @@
 
 <body>
 <script>
+    function searchAlgo(algo) {
+        $("input[name='algorithm']").val(algo);
+        $("input[name='offset']").val(0);
+        $("form")[0].submit();
+    }
+
     function searchOffset(offset) {
         $("input[name='offset']").val(offset);
         $("form")[0].submit();
@@ -21,6 +27,7 @@
 
         <g:form controller="data" id="search-form" action="textSearch" method="get" class="form">
             <input type="hidden" name="offset" value="${offset && offset != -1 ? offset : 0}"/>
+            <input type="hidden" name="algorithm" value="lev"/>
 
             <div class="form-group">
                 <div class="input-group">
@@ -31,9 +38,9 @@
                             <span class="sr-only"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Расстояние Левенштайн</a></li>
-                            <li><a href="#">Расстояние Джаро-Винклера</a></li>
-                            <li><a href="#">Нахождение НОП</a></li>
+                            <li><button class="btn btn-link" onclick="searchAlgo('lev')">Расстояние Левенштайн</button></li>
+                            <li><button class="btn btn-link" onclick="searchAlgo('jv')">Расстояние Джаро-Винклера</button></li>
+                            <li><button class="btn btn-link" onclick="searchAlgo('lcs')">Нахождение НОП</button></li>
                         </ul>
                     </div>
                     <input type="text" id="search" name="search" value="${search == "null" || !search ? "" : search}" class="form-control" placeholder="Введите запрос"/>
