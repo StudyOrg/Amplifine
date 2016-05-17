@@ -11,9 +11,9 @@ class MaterialsDictionary {
             "Rosenwood",
             "Alder",
             "Walnut",
-            "Mahogany",
-            "Poplar",
-            "Spruce",
+//            "Mahogany",
+//            "Poplar",
+//            "Spruce",
             "Plexiglas",
             "Woodglass",
             "Metallic"

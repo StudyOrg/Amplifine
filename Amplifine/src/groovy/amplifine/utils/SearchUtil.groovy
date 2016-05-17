@@ -14,10 +14,6 @@ class SearchUtil {
     private static final String CYRILLIC_CHARS = "йцукенгшщзхъфывапролджэячсмитьбюёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ"
     private static final String LATIN_CHARS = "qwertyuiop[]asdfghjkl;'zxcvbnm,.`QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>~"
 
-    public static final int LIMIT = 10
-
-    private static List goodsList = []
-
     public static String replaceCyrillicChars(String str) {
         return StringUtils.replaceChars(str, CYRILLIC_CHARS, LATIN_CHARS)
     }
