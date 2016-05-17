@@ -15,6 +15,7 @@
 
 # logs
 /stacktrace.log
+Amplifine/target/stacktrace.log
 Amplifine/test/
 /test/reports
 /logs
