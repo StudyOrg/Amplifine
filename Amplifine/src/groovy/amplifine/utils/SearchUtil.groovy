@@ -59,6 +59,8 @@ class SearchUtil {
 
         List<Object> resultList = new ArrayList<>()
 
+        //long begin = System.currentTimeMillis()
+
         // Перебираем все записи в базе для заданной коллекции
         for (it in iterator) {
 
@@ -102,6 +104,8 @@ class SearchUtil {
                     --limit
                 }
             }
+
+            //if (System.currentTimeMillis() - begin > 10_000) break
         }
 
         SearchResult result = new SearchResult()
